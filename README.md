@@ -10,7 +10,9 @@ Usage/Examples
 * `examples/rack_handler.rb` is a Mongrel2 ruby handler rack handler mouthful, whose variables are probably a little off.
 * `examples/lobster.ru` is a rackup file using the Rack handler that'll serve Rack's funny little lobster app.
 
-Run:
+Running Examples
+----------------
+
 * `ruby examples/http_0mq.rb`, which with Mongrel2's test config will serve up at http://localhost:6767/handlertest
 * `rackup examples/lobster.ru`, ditto, http://localhost:6767/handlertest
 
