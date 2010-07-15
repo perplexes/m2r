@@ -6,8 +6,8 @@ A [mongrel2](http://mongrel2.org/index) backend handler written in Ruby, based o
 Usage/Examples
 -----
 
-* `examples/http_0mq.rb` is a test little servlet thing (based on what comes with mongrel2)and there is also a rack handler at 
-* `examples/rack_handler.rb` is a Mongrel2 ruby handler rack handler mouthful, whose variables are probably a little off
+* `examples/http_0mq.rb` is a test little servlet thing (based on what comes with mongrel2).
+* `examples/rack_handler.rb` is a Mongrel2 ruby handler rack handler mouthful, whose variables are probably a little off.
 * `examples/lobster.ru` is a rackup file using the Rack handler that'll serve Rack's funny little lobster app.
 
 Run:
@@ -18,7 +18,7 @@ Installation
 ------------
 
 * Ruby 1.9ish (RVM saved my life here)
-* [FFI](http://github.com/ffi/ffi), `gem install ffi` should be fine
-* [Zero MQ](http://www.zeromq.org/area:download)
+* [FFI](http://github.com/ffi/ffi), `gem install ffi` should be fine.
+* [Zero MQ](http://www.zeromq.org/area:download), you'll need to compile and install to get the headers and such for:
 * [ffi-rzmq](http://github.com/chuckremes/ffi-rzmq), which you'll have to build. The native zmq didn't work for me, but if you want to fix it, please do!
 * Rack (gem install rack) if you want to run the rack example.
