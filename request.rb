@@ -1,10 +1,10 @@
 module Mongrel2
   class Request
-    attr_reader :sender, :path, :conn_id, :headers, :body
+    attr_reader :sender, :conn_id, :path, :headers, :body
     def initialize(sender, conn_id, path, headers, body)
       @sender = sender
-      @path = path
       @conn_id = conn_id
+      @path = path
       @headers = headers
       @body = body
       
@@ -34,7 +34,7 @@ module Mongrel2
 
     def is_disconnect
       if self.headers['METHOD'] == 'JSON'
-        self.data['type'] == 'disconnect'
+        @data['type'] == 'disconnect'
       end
     end
   end # class Request

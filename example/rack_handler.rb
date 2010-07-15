@@ -15,15 +15,22 @@ module Rack
     class Mongrel2Handler
       def self.run(app, receive = "tcp://127.0.0.1:9997", send = "tcp://127.0.0.1:9996")
         conn = Mongrel2::Connection.new($sender_id, receive, send)
-        while true
+        @running = true
+        trap("SIGINT") do
+          @running = false
+        end
+        
+        while @running
           puts "WAITING FOR REQUEST"
 
-          req = conn.recv
-
+          req = conn.recv # Caution: Abort traps on SIGINT :/
           if req.is_disconnect
+            
             puts "DICONNECT"
             next
           end
+          
+          script_name = ENV["RAILS_RELATIVE_URL_ROOT"] || ""
           
           env = {
             "rack.version" => Rack::VERSION,
@@ -34,9 +41,9 @@ module Rack
             "rack.multiprocess" => true,
             "rack.run_once" => false,
             "REQUEST_METHOD" => req.headers["METHOD"],
-            "SCRIPT_NAME" => "",
-            "PATH_INFO" => env["PATH"],
-            "QUERY_STRING" => env["QUERY"]
+            "SCRIPT_NAME" => script_name,
+            "PATH_INFO" => req.headers["PATH"].gsub(script_name, ''),
+            "QUERY_STRING" => req.headers["QUERY"]
           }
           
           env["SERVER_NAME"], env["SERVER_PORT"] = req.headers["Host"].split(':', 2)
@@ -48,7 +55,9 @@ module Rack
           end
           
           status, headers, rack_response = app.call(env)
-          conn.reply_http(req, rack_response.body.join, status, headers)
+          body = ""
+          rack_response.each{|b| body << b}
+          conn.reply_http(req, body, status, headers)
         end
       end
     end

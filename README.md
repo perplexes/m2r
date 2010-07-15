@@ -14,6 +14,22 @@ Run:
 * `ruby examples/http_0mq.rb`, which with Mongrel2's test config will serve up at http://localhost:6767/handlertest
 * `rackup examples/lobster.ru`, ditto, http://localhost:6767/handlertest
 
+With rails3:
+Add this to your Gemfile:
+
+    gem 'ffi'
+    gem 'ffi-rzmq'
+    gem 'json'
+
+And this to your config.ru:
+
+    $: << location_to_m2r + '/example'
+    require 'rack_handler'
+    
+    Rack::Handler::Mongrel2Handler.run YourRailsAppName::Application
+  
+Then do all like `RAILS_RELATIVE_URL_ROOT=/handlertest bundle exec rackup` (relative root thing until http://mongrel2.org/tktview?name=756ec05599 is taken care of somehow.)
+
 Installation
 ------------
 
@@ -21,4 +37,4 @@ Installation
 * [FFI](http://github.com/ffi/ffi), `gem install ffi` should be fine.
 * [Zero MQ](http://www.zeromq.org/area:download), you'll need to compile and install to get the headers and such for:
 * [ffi-rzmq](http://github.com/chuckremes/ffi-rzmq), which you'll have to build. The native zmq didn't work for me, but if you want to fix it, please do!
-* Rack (gem install rack) if you want to run the rack example.
+* Rack `gem install rack` if you want to run the rack example.
