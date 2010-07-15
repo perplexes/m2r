@@ -7,21 +7,11 @@ gem 'ffi-rzmq'
 gem 'json'
 require 'ffi-rzmq'
 require 'json'
+
 $: << File.dirname(__FILE__)
 require 'request'
 
 CTX = ZMQ::Context.new(1)
-HTTP_FORMAT = "HTTP/1.1 %(code)s %(status)s\r\n%(headers)s\r\n\r\n%(body)s"
-
-class String
-  # Match python's % function
-  def |(args)
-    args.inject(self.dup) do |copy, (key, val)|
-      copy.gsub!(/%\(#{key.to_s}\)/, val.to_s)
-      copy
-    end
-  end
-end
 
 module Mongrel2
   # A Connection object manages the connection between your handler
@@ -86,8 +76,8 @@ module Mongrel2
     # Basic HTTP response mechanism which will take your body,
     # any headers you've made, and encode them so that the 
     # browser gets them.
-    def reply_http(req, body, code=200, status="OK", headers={})
-      self.reply(req, http_response(body, code, status, headers))
+    def reply_http(req, body, code=200, headers={})
+      self.reply(req, http_response(body, code, headers))
     end
 
     # This lets you send a single message to many currently
@@ -108,17 +98,60 @@ module Mongrel2
     # Same as deliver, but builds an HTTP response, which means, yes,
     # you can reply to multiple connected clients waiting for an HTTP 
     # response from one handler.  Kinda cool.
-    def deliver_http(idents, body, code=200, status="OK", headers={})
-      self.deliver(idents, http_response(body, code, status, headers))
+    def deliver_http(idents, body, code=200, headers={})
+      self.deliver(idents, http_response(body, code, headers))
     end
     
     private
-    def http_response(body, code, status, headers)
-      payload = {'code' => code, 'status' => status, 'body' => body}
+    def http_response(body, code, headers)
       headers['Content-Length'] = body.size
-      payload['headers'] = headers.map{|k, v| "%s: %s" % [k,v]}.join("\r\n")
+      headers_s = headers.map{|k, v| "%s: %s" % [k,v]}.join("\r\n")
 
-      HTTP_FORMAT | payload
+      "HTTP/1.1 #{code} #{StatusMessage[code.to_i]}\r\n#{headers_s}\r\n\r\n#{body}"
     end
+    
+    # From WEBrick: thanks dawg.
+    StatusMessage = {
+      100 => 'Continue',
+      101 => 'Switching Protocols',
+      200 => 'OK',
+      201 => 'Created',
+      202 => 'Accepted',
+      203 => 'Non-Authoritative Information',
+      204 => 'No Content',
+      205 => 'Reset Content',
+      206 => 'Partial Content',
+      300 => 'Multiple Choices',
+      301 => 'Moved Permanently',
+      302 => 'Found',
+      303 => 'See Other',
+      304 => 'Not Modified',
+      305 => 'Use Proxy',
+      307 => 'Temporary Redirect',
+      400 => 'Bad Request',
+      401 => 'Unauthorized',
+      402 => 'Payment Required',
+      403 => 'Forbidden',
+      404 => 'Not Found',
+      405 => 'Method Not Allowed',
+      406 => 'Not Acceptable',
+      407 => 'Proxy Authentication Required',
+      408 => 'Request Timeout',
+      409 => 'Conflict',
+      410 => 'Gone',
+      411 => 'Length Required',
+      412 => 'Precondition Failed',
+      413 => 'Request Entity Too Large',
+      414 => 'Request-URI Too Large',
+      415 => 'Unsupported Media Type',
+      416 => 'Request Range Not Satisfiable',
+      417 => 'Expectation Failed',
+      500 => 'Internal Server Error',
+      501 => 'Not Implemented',
+      502 => 'Bad Gateway',
+      503 => 'Service Unavailable',
+      504 => 'Gateway Timeout',
+      505 => 'HTTP Version Not Supported'
+    }
   end # class Connection
 end # mod Mongrel2
