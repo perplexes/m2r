@@ -38,3 +38,22 @@ Installation
 * [Zero MQ](http://www.zeromq.org/area:download), you'll need to compile and install to get the headers and such for:
 * [ffi-rzmq](http://github.com/chuckremes/ffi-rzmq), which you'll have to build. The native zmq didn't work for me, but if you want to fix it, please do!
 * Rack `gem install rack` if you want to run the rack example.
+
+Booby Traps
+-----------
+
+    uninitialized constant RUBY_ENGINE
+
+You're running an old Ruby, use 1.9.
+
+Contributing
+------------
+
+Once you've made your great commits:
+
+1. [Fork][fk] m2r
+2. Create a topic branch - `git checkout -b my_branch`
+3. Push to your branch - `git push origin my_branch`
+4. Send a pull request.
+
+
