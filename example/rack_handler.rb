@@ -5,7 +5,7 @@ require 'stringio'
 # Debugger.start
 # gem install ruby-debug19 -- --with-ruby-include=$HOME/.rvm/src/ruby-1.9.2-head
 
-$: << File.expand_path(File.dirname(__FILE__) + '/..')
+$: << ::File.expand_path(::File.dirname(__FILE__) + '/..')
 require 'connection'
 
 $sender_id = "70D107AB-19F5-44AE-A2D0-2326A167D8D7"

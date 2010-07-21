@@ -39,6 +39,7 @@ Installation
 * [FFI](http://github.com/ffi/ffi), `gem install ffi` should be fine.
 * [Zero MQ](http://www.zeromq.org/area:download), you'll need to compile and install to get the headers and such for:
 * [ffi-rzmq](http://github.com/chuckremes/ffi-rzmq), which you'll have to build. The native zmq didn't work for me, but if you want to fix it, please do!
+* [json](http://github.com/genki/json), since the headers are returned in JSON, which is RAD. (Really Awesome, Dude)
 * Rack `gem install rack` if you want to run the rack example.
 
 Booby Traps
