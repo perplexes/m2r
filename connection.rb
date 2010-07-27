@@ -56,21 +56,23 @@ module Mongrel2
      
     # Raw send to the given connection ID, mostly used 
     # internally.
-    def send_resp(conn_id, msg)
-      # debugger
-      @resp.send_string(conn_id + ' ' + msg, 0)
+    def send_resp(uuid, conn_id, msg)
+      header = "%s %d:%s," % [uuid, conn_id.size, conn_id]
+      string = header + ' ' + msg
+      #puts "DEBUG: #{string.inspect}"
+      @resp.send_string(string, 0)
     end
     
     # Does a reply based on the given Request object and message.
     # This is easier since the req object contains all the info
     # needed to do the proper reply addressing.
     def reply(req, msg)
-      self.send_resp(req.conn_id, msg)
+      self.send_resp(req.sender, req.conn_id, msg)
     end
 
     # Same as reply, but tries to convert data to JSON first.
     def reply_json(req, data)
-      self.send_resp(req.conn_id, JSON.generate(data))
+      self.send_resp(req.sender, req.conn_id, JSON.generate(data))
     end
 
     # Basic HTTP response mechanism which will take your body,
@@ -85,21 +87,20 @@ module Mongrel2
     # not exceed, so chunk your targets as needed.  Each target
     # will receive the message once by Mongrel2, but you don't have
     # to loop which cuts down on reply volume.
-    def deliver(idents, data)
-      # debugger
-      @resp.send_string(idents.join(' ') + ' ' + data, 0)
+    def deliver(uuid, idents, data)
+      self.send_resp(uuid, idents.join(' '), data)
     end
 
     # Same as deliver, but converts to JSON first.
-    def deliver_json(idents, data)
-      self.deliver(idents, JSON.generate(data))
+    def deliver_json(uuid, idents, data)
+      self.deliver(uuid, idents, JSON.generate(data))
     end
     
     # Same as deliver, but builds an HTTP response, which means, yes,
     # you can reply to multiple connected clients waiting for an HTTP 
     # response from one handler.  Kinda cool.
-    def deliver_http(idents, body, code=200, headers={})
-      self.deliver(idents, http_response(body, code, headers))
+    def deliver_http(uuid, idents, body, code=200, headers={})
+      self.deliver(uuid, idents, http_response(body, code, headers))
     end
     
     private

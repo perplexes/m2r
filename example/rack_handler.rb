@@ -12,9 +12,9 @@ $sender_id = "70D107AB-19F5-44AE-A2D0-2326A167D8D7"
 
 module Rack
   module Handler
-    class Mongrel2Handler
+    class Mongrel2
       def self.run(app, receive = "tcp://127.0.0.1:9997", send = "tcp://127.0.0.1:9996")
-        conn = Mongrel2::Connection.new($sender_id, receive, send)
+        conn = ::Mongrel2::Connection.new($sender_id, receive, send)
         @running = true
         trap("SIGINT") do
           @running = false
@@ -30,7 +30,9 @@ module Rack
             next
           end
           
-          script_name = ENV["RAILS_RELATIVE_URL_ROOT"] || ""
+          script_name = ENV["RACK_RELATIVE_URL_ROOT"] ||
+            # PATTERN is like:  /test/(.*.json) or /handlertest
+            req.headers["PATTERN"].split('(', 2).first.gsub(/\/$/, '')
           
           env = {
             "rack.version" => Rack::VERSION,
@@ -40,6 +42,9 @@ module Rack
             "rack.multithread" => true,
             "rack.multiprocess" => true,
             "rack.run_once" => false,
+            
+            "mongrel2.pattern" => req.headers["PATTERN"],
+            
             "REQUEST_METHOD" => req.headers["METHOD"],
             "SCRIPT_NAME" => script_name,
             "PATH_INFO" => req.headers["PATH"].gsub(script_name, ''),
