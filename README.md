@@ -54,9 +54,9 @@ Contributing
 
 Once you've made your great commits:
 
-1. [Fork m2r](#fork_box)
+1. Fork m2r
 2. Create a topic branch - `git checkout -b my_branch`
 3. Push to your branch - `git push origin my_branch`
-4. [Send a pull request](pull_request)
+4. Send a pull request
 
 
