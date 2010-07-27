@@ -28,14 +28,14 @@ And this to your config.ru:
     $: << location_to_m2r + '/example'
     require 'rack_handler'
     
-    Rack::Handler::Mongrel2Handler.run YourRailsAppName::Application
+    Rack::Handler::Mongrel2.run YourRailsAppName::Application
   
-Then do all like `RAILS_RELATIVE_URL_ROOT=/handlertest bundle exec rackup` (relative root thing until http://mongrel2.org/tktview?name=756ec05599 is taken care of somehow.)
+Then do all like `bundle exec rackup`
 
 Installation
 ------------
 
-* Ruby 1.9ish (RVM saved my life here)
+* Ruby 1.9.2ish (RVM saved my life here - 1.9.2 because 1.9.1 has a segfault in ffi-rzmq)
 * [FFI](http://github.com/ffi/ffi), `gem install ffi` should be fine.
 * [Zero MQ](http://www.zeromq.org/area:download), you'll need to compile and install to get the headers and such for:
 * [ffi-rzmq](http://github.com/chuckremes/ffi-rzmq), which you'll have to build. The native zmq didn't work for me, but if you want to fix it, please do!
@@ -47,16 +47,16 @@ Booby Traps
 
     uninitialized constant RUBY_ENGINE
 
-You're running an old Ruby, use 1.9.
+You're running an old Ruby, use 1.9.2.
 
 Contributing
 ------------
 
 Once you've made your great commits:
 
-1. [Fork][fk] m2r
+1. [Fork m2r](#fork_box)
 2. Create a topic branch - `git checkout -b my_branch`
 3. Push to your branch - `git push origin my_branch`
-4. Send a pull request.
+4. [Send a pull request](pull_request)
 
 
