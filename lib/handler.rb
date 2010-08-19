@@ -39,7 +39,7 @@ module Mongrel2
       loop do
         on_wait
 
-        # get the request from Mongrel2 on the SUB socket
+        # get the request from Mongrel2 on the UPSTREAM socket
         request = @connection.recv
         # run the on_request hook
         on_request(request)
