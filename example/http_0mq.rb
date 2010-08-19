@@ -1,7 +1,9 @@
+# You can spin up many of these - Mongrel2 will then round-robin requests to each one.
+
 # require 'rubygems'
 # require 'ruby-debug'
 # Debugger.start
-$: << File.expand_path(File.dirname(__FILE__) + '/..')
+$: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'connection'
 
 sender_id = "C2256F34-14A1-45DD-BB73-97CAE25E25B4"
@@ -9,13 +11,13 @@ sender_id = "C2256F34-14A1-45DD-BB73-97CAE25E25B4"
 conn = Mongrel2::Connection.new(sender_id, "tcp://127.0.0.1:9997",
                           "tcp://127.0.0.1:9996")
 
-while true
+loop do
   puts "WAITING FOR REQUEST"
 
   req = conn.recv
 
-  if req.is_disconnect
-    puts "DICONNECT"
+  if req.disconnect?
+    puts "DISCONNECT"
     next
   end
 

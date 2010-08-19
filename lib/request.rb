@@ -32,11 +32,13 @@ module Mongrel2
       self.new(sender, conn_id, path, headers, body)
     end
 
-    def is_disconnect
+    def disconnect? 
       if self.headers['METHOD'] == 'JSON'
         @data['type'] == 'disconnect'
       end
     end
+    alias :is_disconnect :disconnect?
+
   end # class Request
 end # mod Mongrel2
     

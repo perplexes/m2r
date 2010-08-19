@@ -5,13 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "m2r"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "pradeepe@gmail.com"
+    gem.summary = "Mongrel2 interface and handler2 library for Ruby 1.9" 
     gem.homepage = "http://github.com/skyfallsin/m2r"
-    gem.authors = ["Pradeep Elankumaran"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_dependency "ffi", ">= 0"
+    gem.add_dependency "ffi-rzmq", ">= 0"
+    gem.add_dependency "json", ">= 0"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
