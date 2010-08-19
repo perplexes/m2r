@@ -1,12 +1,6 @@
 # On OSX:
 # sudo port install zmq
 # sudo gem install zmq
-# RUBY_ENGINE = 'ruby'
-require 'rubygems'
-gem 'ffi-rzmq'
-gem 'json'
-require 'ffi-rzmq'
-require 'json'
 
 $: << File.dirname(__FILE__)
 require 'request'
