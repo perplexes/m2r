@@ -12,7 +12,6 @@ module Mongrel2
 
     # Callback when a request is received (for debug)
     def on_request(request, *args)
-      puts "ON REQUEST: #{request}"
     end
 
     # Override this to return a custom response 
