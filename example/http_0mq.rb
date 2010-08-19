@@ -1,31 +1,33 @@
+# http_0mq.rb - an example handler from the Mongrel2 book
 # You can spin up many of these - Mongrel2 will then round-robin requests to each one.
 
 # require 'rubygems'
 # require 'ruby-debug'
 # Debugger.start
 $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
-require 'connection'
+require 'm2r'
 
-sender_id = "C2256F34-14A1-45DD-BB73-97CAE25E25B4"
+class Http0MQHandler < Mongrel2::Handler
+  # There are more hooks you can override - check out lib/handler.rb
 
-conn = Mongrel2::Connection.new(sender_id, "tcp://127.0.0.1:9997",
-                          "tcp://127.0.0.1:9996")
-
-loop do
-  puts "WAITING FOR REQUEST"
-
-  req = conn.recv
-
-  if req.disconnect?
-    puts "DISCONNECT"
-    next
+  def on_wait
+    puts "WAITING FOR REQUEST"
   end
 
-  response = "<pre>\nSENDER: %s\nIDENT:%s\nPATH: %s\nHEADERS:%s\nBODY:%s</pre>" % [
+  def on_disconnect
+    puts "DISCONNECT"
+  end
+
+  def process(req)
+    response = "<pre>\nSENDER: %s\nIDENT:%s\nPATH: %s\nHEADERS:%s\nBODY:%s</pre>" % [
       req.sender.inspect, req.conn_id.inspect, req.path.inspect, 
       JSON.generate(req.headers).inspect, req.body.inspect]
-
-  puts response
-
-  conn.reply_http(req, response)
+    puts response
+    response
+  end
 end
+
+sender_id = "C2256F34-14A1-45DD-BB73-97CAE25E25B4"
+handler = Http0MQHandler.new(
+            sender_id, "tcp://127.0.0.1:9997", "tcp://127.0.0.1:9996")
+handler.listen

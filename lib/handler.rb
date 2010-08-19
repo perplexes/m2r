@@ -6,26 +6,43 @@ module Mongrel2
                       subscribe_address, publish_address)
     end
 
-    def on_request(request)
+    # Callback for when the handler is waiting for a request
+    def on_wait(*args)
+    end
+
+    # Callback when a request is received (for debug)
+    def on_request(request, *args)
       puts "ON REQUEST: #{request}"
     end
 
-    def process_request(request) 
+    # Override this to return a custom response 
+    def process(request, *args) 
       puts "PROCES REQUEST: #{request}"
       #raise NoHandlerDefined, "define process_request in your subclass"
       return request.inspect
     end
 
-    def on_disconnect(request)
-      puts "ON DISCONNECT: #{request}"
+    # Callback for when the server disconnects
+    def on_disconnect(request, *args)
+    end
+
+    # Callback after process_request is done 
+    def after_process(response, request, *args)
+      return response
+    end
+    
+    # Callback after the server gets the response
+    def after_reply(request, response, *args)
     end
   
     def listen
       loop do
+        on_wait
+
         # get the request from Mongrel2 on the SUB socket
         request = @connection.recv
         # run the on_request hook
-        on_request
+        on_request(request)
 
         # run on_disconnect if the server disconnects
         if request.disconnect?
@@ -34,10 +51,15 @@ module Mongrel2
         end
           
         # get the response from on_request
-        response = process_request(request) 
+        response = process(request) 
+
+        # run the response through a filter
+        response = after_process(response, request)
 
         # send it back to the server on the PUB socket
         @connection.reply_http(request, response)
+
+        after_reply(request, response)
       end
     end
   end
