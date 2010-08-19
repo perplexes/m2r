@@ -28,6 +28,7 @@ class Http0MQHandler < Mongrel2::Handler
 end
 
 sender_id = "C2256F34-14A1-45DD-BB73-97CAE25E25B4"
-handler = Http0MQHandler.new(
-            sender_id, "tcp://127.0.0.1:9997", "tcp://127.0.0.1:9996")
-handler.listen
+publish   = "tcp://127.0.0.1:9996"
+subscribe = "tcp://127.0.0.1:9997"
+
+Http0MQHandler.listen(sender_id, subscribe, publish)

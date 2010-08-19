@@ -63,4 +63,8 @@ module Mongrel2
       end
     end
   end
+
+  def self.listen(*args)
+    new(*args).listen
+  end
 end
