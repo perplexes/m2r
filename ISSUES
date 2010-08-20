@@ -1,0 +1,62 @@
+On Ruby 1.9.2, ffi-rzmq crashes on even moderately high loads with the following stack. At this point, the only fix is to switch over to JRuby. I suspect that this crash has a lot to do with MRI's global interpreter lock (GIL). There's also a note about weird behavior on the ffi-rzmq github page, which counsels people to use JRuby, which doesn't have a GIL.
+
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80: [BUG] cfp consistency error - call0
+ruby 1.9.2p0 (2010-08-18 revision 29036) [x86_64-darwin10.4.0]
+
+-- control frame ----------
+c:0014 p:---- s:0048 b:0048 l:000047 d:000047 CFUNC  :(null)
+c:0013 p:---- s:0046 b:0046 l:000045 d:000045 CFUNC  :new
+c:0012 p:0044 s:0040 b:0040 l:000039 d:000039 METHOD .rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80
+c:0011 p:---- s:0035 b:0035 l:000034 d:000034 FINISH
+c:0010 p:---- s:0033 b:0033 l:000032 d:000032 CFUNC  :new
+c:0009 p:0017 s:0030 b:0030 l:000029 d:000029 METHOD .rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/socket.rb:293
+c:0008 p:0022 s:0024 b:0023 l:000022 d:000022 METHOD /m2r/lib/connection.rb:42
+c:0007 p:0021 s:0020 b:0020 l:000010 d:000019 BLOCK  /m2r/lib/handler.rb:43
+c:0006 p:---- s:0016 b:0016 l:000015 d:000015 FINISH
+c:0005 p:---- s:0014 b:0014 l:000013 d:000013 CFUNC  :loop
+c:0004 p:0011 s:0011 b:0011 l:000010 d:000010 METHOD /m2r/lib/handler.rb:39
+c:0003 p:0112 s:0008 b:0008 l:001598 d:000a68 EVAL   example/http_0mq.rb:33
+c:0002 p:---- s:0004 b:0004 l:000003 d:000003 FINISH
+c:0001 p:0000 s:0002 b:0002 l:001598 d:001598 TOP   
+---------------------------
+-- Ruby level backtrace information ----------------------------------------
+example/http_0mq.rb:33:in `<main>'
+/m2r/lib/handler.rb:39:in `listen'
+/m2r/lib/handler.rb:39:in `loop'
+/m2r/lib/handler.rb:43:in `block in listen'
+/m2r/lib/connection.rb:42:in `recv'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/socket.rb:293:in `recv_string'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/socket.rb:293:in `new'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80:in `initialize'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80:in `new'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80: [BUG] Segmentation fault
+ruby 1.9.2p0 (2010-08-18 revision 29036) [x86_64-darwin10.4.0]
+
+-- control frame ----------
+c:0014 p:---- s:0048 b:0048 l:000047 d:000047 CFUNC  :(null)
+c:0013 p:---- s:0046 b:0046 l:000045 d:000045 CFUNC  :new
+c:0012 p:0044 s:0040 b:0040 l:000039 d:000039 METHOD .rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80
+c:0011 p:---- s:0035 b:0035 l:000034 d:000034 FINISH
+c:0010 p:---- s:0033 b:0033 l:000032 d:000032 CFUNC  :new
+c:0009 p:0017 s:0030 b:0030 l:000029 d:000029 METHOD .rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/socket.rb:293
+c:0008 p:0022 s:0024 b:0023 l:000022 d:000022 METHOD /m2r/lib/connection.rb:42
+c:0007 p:0021 s:0020 b:0020 l:000010 d:000019 BLOCK  /m2r/lib/handler.rb:43
+c:0006 p:---- s:0016 b:0016 l:000015 d:000015 FINISH
+c:0005 p:---- s:0014 b:0014 l:000013 d:000013 CFUNC  :loop
+c:0004 p:0011 s:0011 b:0011 l:000010 d:000010 METHOD /m2r/lib/handler.rb:39
+c:0003 p:0112 s:0008 b:0008 l:001598 d:000a68 EVAL   example/http_0mq.rb:33
+c:0002 p:---- s:0004 b:0004 l:000003 d:000003 FINISH
+c:0001 p:0000 s:0002 b:0002 l:001598 d:001598 TOP   
+---------------------------
+-- Ruby level backtrace information ----------------------------------------
+example/http_0mq.rb:33:in `<main>'
+/m2r/lib/handler.rb:39:in `listen'
+/m2r/lib/handler.rb:39:in `loop'
+/m2r/lib/handler.rb:43:in `block in listen'
+/m2r/lib/connection.rb:42:in `recv'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/socket.rb:293:in `recv_string'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/socket.rb:293:in `new'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80:in `initialize'
+.rvm/gems/ruby-1.9.2-p0/gems/ffi-rzmq-0.5.0/lib/ffi-rzmq/message.rb:80:in `new'
+
+
