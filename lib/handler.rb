@@ -34,6 +34,7 @@ module Mongrel2
     def after_reply(request, response, *args)
     end
   
+    # the body of the main recv loop
     def listen
       loop do
         on_wait
