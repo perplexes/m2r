@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Mongrel2 interface and handler2 library for Ruby 1.9}
+  s.summary = %q{Mongrel2 interface and handler2 library for JRuby}
   s.test_files = [
     "test/helper.rb",
      "test/test_m2r.rb"
