@@ -50,7 +50,7 @@ module Rack
             "QUERY_STRING" => req.headers["QUERY"]
           }
           
-          env["SERVER_NAME"], env["SERVER_PORT"] = req.headers["Host"].split(':', 2)
+          env["SERVER_NAME"], env["SERVER_PORT"] = req.headers["host"].split(':', 2)
           req.headers.each do |key, val|
             unless key =~ /content_(type|length)/i
               key = "HTTP_#{key.upcase}"

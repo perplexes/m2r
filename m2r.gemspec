@@ -5,10 +5,13 @@
 
 Gem::Specification.new do |s|
   s.name = %q{m2r}
-  s.version = "0.0.1"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.date = %q{2010-08-19}
+  s.authors = ["Colin Curtin", "Pradeep Elankumaran"]
+  s.date = %q{2010-10-23}
+  s.description = %q{A Mongrel2 interface and handler library for JRuby, and hopefully other Ruby implementations in the future. Works with Rack, so it works with Rails! (Rails installation guide forthcoming.)}
+  s.email = %q{colin.t.curtin+m2r@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
      "README.md"
@@ -16,25 +19,29 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
      ".gitignore",
+     "ISSUES",
      "LICENSE",
      "README.md",
      "Rakefile",
      "VERSION",
+     "benchmarks/jruby",
      "example/http_0mq.rb",
      "example/lobster.ru",
      "example/rack_handler.rb",
      "lib/connection.rb",
+     "lib/fiber_handler.rb",
+     "lib/handler.rb",
      "lib/m2r.rb",
      "lib/request.rb",
      "m2r.gemspec",
      "test/helper.rb",
      "test/test_m2r.rb"
   ]
-  s.homepage = %q{http://github.com/skyfallsin/m2r}
+  s.homepage = %q{http://github.com/perplexes/m2r}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Mongrel2 interface and handler2 library for JRuby}
+  s.rubygems_version = %q{1.3.6}
+  s.summary = %q{Mongrel2 interface and handler library for JRuby}
   s.test_files = [
     "test/helper.rb",
      "test/test_m2r.rb"
@@ -44,7 +51,7 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<ffi>, [">= 0"])
       s.add_runtime_dependency(%q<ffi-rzmq>, [">= 0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])

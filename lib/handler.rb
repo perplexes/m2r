@@ -16,7 +16,7 @@ module Mongrel2
 
     # Override this to return a custom response 
     def process(request, *args) 
-      puts "PROCES REQUEST: #{request}"
+      puts "PROCESS REQUEST: #{request}"
       #raise NoHandlerDefined, "define process_request in your subclass"
       return request.inspect
     end
