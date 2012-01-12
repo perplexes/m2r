@@ -39,7 +39,9 @@ module Mongrel2
     # Receives a raw Request object that you
     # can then work with.
     def recv
-      Request.parse(@reqs.recv_string(0))
+      msg = String.new
+      rc = @reqs.recv_string msg, 0
+      Request.parse(msg)
     end
 
     # Same as regular recv, but assumes the body is JSON and 
