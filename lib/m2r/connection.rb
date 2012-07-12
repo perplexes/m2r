@@ -1,8 +1,5 @@
 require 'm2r/request'
-require 'ffi-rzmq'
 require 'json'
-
-CTX = ZMQ::Context.new(1)
 
 module M2R
   # A Connection object manages the connection between your handler
@@ -13,13 +10,13 @@ module M2R
   # for simplicity since that'll be fairly common.
   class Connection
 
-    def initialize(sender_id, sub_addr, pub_addr)
+    def initialize(sender_id, sub_addr, pub_addr, context = Mongrel2.zmq_context)
       @sender_id = sender_id
 
-      @reqs = CTX.socket(ZMQ::UPSTREAM)
+      @reqs = context.socket(ZMQ::PULL)
       @reqs.connect(sub_addr)
 
-      @resp = CTX.socket(ZMQ::PUB)
+      @resp = context.socket(ZMQ::PUB)
       @resp.connect(pub_addr)
       @resp.setsockopt(ZMQ::IDENTITY, sender_id)
 
