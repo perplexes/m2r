@@ -11,8 +11,6 @@ require 'json'
 $: << File.dirname(__FILE__)
 require 'request'
 
-CTX = ZMQ::Context.new(1)
-
 module Mongrel2
   # A Connection object manages the connection between your handler
   # and a Mongrel2 server (or servers).  It can receive raw requests
@@ -22,13 +20,13 @@ module Mongrel2
   # for simplicity since that'll be fairly common.
   class Connection
 
-    def initialize(sender_id, sub_addr, pub_addr)
+    def initialize(sender_id, sub_addr, pub_addr, context = Mongrel2.zmq_context)
       @sender_id = sender_id
 
-      @reqs = CTX.socket(ZMQ::UPSTREAM)
+      @reqs = context.socket(ZMQ::PULL)
       @reqs.connect(sub_addr)
 
-      @resp = CTX.socket(ZMQ::PUB)
+      @resp = context.socket(ZMQ::PUB)
       @resp.connect(pub_addr)
       @resp.setsockopt(ZMQ::IDENTITY, sender_id)
 
