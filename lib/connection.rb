@@ -11,8 +11,6 @@ require 'json'
 $: << File.dirname(__FILE__)
 require 'request'
 
-CTX = ZMQ::Context.new(1)
-
 module Mongrel2
   # A Connection object manages the connection between your handler
   # and a Mongrel2 server (or servers).  It can receive raw requests
@@ -21,21 +19,21 @@ module Mongrel2
   # raw or as JSON.  It also has a way to encode HTTP responses
   # for simplicity since that'll be fairly common.
   class Connection
-  
-    def initialize(sender_id, sub_addr, pub_addr)
+
+    def initialize(sender_id, sub_addr, pub_addr, context = Mongrel2.zmq_context)
       @sender_id = sender_id
 
-      @reqs = CTX.socket(ZMQ::UPSTREAM)
+      @reqs = context.socket(ZMQ::PULL)
       @reqs.connect(sub_addr)
 
-      @resp = CTX.socket(ZMQ::PUB)
+      @resp = context.socket(ZMQ::PUB)
       @resp.connect(pub_addr)
       @resp.setsockopt(ZMQ::IDENTITY, sender_id)
 
       @sub_addr = sub_addr
       @pub_addr = pub_addr
     end
-  
+
     # Receives a raw Request object that you
     # can then work with.
     def recv
@@ -44,10 +42,10 @@ module Mongrel2
       Request.parse(msg)
     end
 
-    # Same as regular recv, but assumes the body is JSON and 
+    # Same as regular recv, but assumes the body is JSON and
     # creates a new attribute named req.data with the decoded
     # payload.  This will throw an error if it is not JSON.
-    # 
+    #
     # Normally Request just does this if the METHOD is 'JSON'
     # but you can use this to force it for say HTTP requests.
     def recv_json
@@ -55,8 +53,8 @@ module Mongrel2
         req.data ||= JSON.parse(req.body)
       end
     end
-     
-    # Raw send to the given connection ID, mostly used 
+
+    # Raw send to the given connection ID, mostly used
     # internally.
     def send_resp(uuid, conn_id, msg)
       header = "%s %d:%s," % [uuid, conn_id.size, conn_id]
@@ -64,7 +62,7 @@ module Mongrel2
       #puts "DEBUG: #{string.inspect}"
       @resp.send_string(string, 0)
     end
-    
+
     # Does a reply based on the given Request object and message.
     # This is easier since the req object contains all the info
     # needed to do the proper reply addressing.
@@ -78,7 +76,7 @@ module Mongrel2
     end
 
     # Basic HTTP response mechanism which will take your body,
-    # any headers you've made, and encode them so that the 
+    # any headers you've made, and encode them so that the
     # browser gets them.
     def reply_http(req, body, code=200, headers={})
       self.reply(req, http_response(body, code, headers))
@@ -97,14 +95,14 @@ module Mongrel2
     def deliver_json(uuid, idents, data)
       self.deliver(uuid, idents, JSON.generate(data))
     end
-    
+
     # Same as deliver, but builds an HTTP response, which means, yes,
-    # you can reply to multiple connected clients waiting for an HTTP 
+    # you can reply to multiple connected clients waiting for an HTTP
     # response from one handler.  Kinda cool.
     def deliver_http(uuid, idents, body, code=200, headers={})
       self.deliver(uuid, idents, http_response(body, code, headers))
     end
-    
+
     private
     def http_response(body, code, headers)
       headers['Content-Length'] = body.size
@@ -112,7 +110,7 @@ module Mongrel2
 
       "HTTP/1.1 #{code} #{StatusMessage[code.to_i]}\r\n#{headers_s}\r\n\r\n#{body}"
     end
-    
+
     # From WEBrick: thanks dawg.
     StatusMessage = {
       100 => 'Continue',

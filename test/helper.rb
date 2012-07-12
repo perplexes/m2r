@@ -1,10 +1,6 @@
 require 'rubygems'
-require 'test/unit'
-require 'shoulda'
+require 'minitest/autorun'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'm2r'
-
-class Test::Unit::TestCase
-end
