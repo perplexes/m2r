@@ -13,5 +13,6 @@ require 'rack/lobster'
 require './rack_handler'
 
 use Rack::ShowExceptions
-Rack::Handler::Mongrel2.run Rack::Lobster.new
+use Rack::ContentLength
 
+Rack::Handler::Mongrel2.run Rack::Lobster.new

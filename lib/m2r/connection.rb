@@ -94,7 +94,6 @@ module M2R
 
     private
     def http_response(body, code, headers)
-      headers['Content-Length'] = body.size
       headers_s = headers.map{|k, v| "%s: %s" % [k,v]}.join("\r\n")
 
       "HTTP/1.1 #{code} #{StatusMessage[code.to_i]}\r\n#{headers_s}\r\n\r\n#{body}"
