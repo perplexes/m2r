@@ -1,7 +1,7 @@
 module Mongrel2
   class Handler
     attr_accessor :connection
-    def initialize(sender_uuid, subscribe_address, publish_address) 
+    def initialize(sender_uuid, subscribe_address, publish_address)
       @connection = Mongrel2::Connection.new(sender_uuid,
                       subscribe_address, publish_address)
     end
@@ -14,8 +14,8 @@ module Mongrel2
     def on_request(request, *args)
     end
 
-    # Override this to return a custom response 
-    def process(request, *args) 
+    # Override this to return a custom response
+    def process(request, *args)
       puts "PROCESS REQUEST: #{request}"
       #raise NoHandlerDefined, "define process_request in your subclass"
       return request.inspect
@@ -25,15 +25,15 @@ module Mongrel2
     def on_disconnect(request, *args)
     end
 
-    # Callback after process_request is done 
+    # Callback after process_request is done
     def after_process(response, request, *args)
       return response
     end
-    
+
     # Callback after the server gets the response
     def after_reply(request, response, *args)
     end
-  
+
     # the body of the main recv loop
     def listen
       loop do
@@ -49,9 +49,9 @@ module Mongrel2
           on_disconnect
           next
         end
-          
+
         # get the response from on_request
-        response = process(request) 
+        response = process(request)
 
         # run the response through a filter
         response = after_process(response, request)

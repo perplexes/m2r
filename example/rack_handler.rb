@@ -19,7 +19,7 @@ module Rack
         trap("SIGINT") do
           @running = false
         end
-        
+
         while @running
           puts "WAITING FOR REQUEST"
 
@@ -28,11 +28,11 @@ module Rack
             puts "DICONNECT"
             next
           end
-          
+
           script_name = ENV["RACK_RELATIVE_URL_ROOT"] ||
             # PATTERN is like:  /test/(.*.json) or /handlertest
             req.headers["PATTERN"].split('(', 2).first.gsub(/\/$/, '')
-          
+
           env = {
             "rack.version" => Rack::VERSION,
             "rack.url_scheme" => "http",
@@ -41,15 +41,15 @@ module Rack
             "rack.multithread" => true,
             "rack.multiprocess" => true,
             "rack.run_once" => false,
-            
+
             "mongrel2.pattern" => req.headers["PATTERN"],
-            
+
             "REQUEST_METHOD" => req.headers["METHOD"],
             "SCRIPT_NAME" => script_name,
             "PATH_INFO" => req.headers["PATH"].gsub(script_name, ''),
             "QUERY_STRING" => req.headers["QUERY"]
           }
-          
+
           env["SERVER_NAME"], env["SERVER_PORT"] = req.headers["host"].split(':', 2)
           req.headers.each do |key, val|
             unless key =~ /content_(type|length)/i
@@ -57,7 +57,7 @@ module Rack
             end
             env[key] = val
           end
-          
+
           status, headers, rack_response = app.call(env)
           body = ""
           rack_response.each{|b| body << b}

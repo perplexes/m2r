@@ -7,7 +7,7 @@ module Mongrel2
       @path = path
       @headers = headers
       @body = body
-      
+
       if headers['METHOD'] == 'JSON'
         @data = JSON.parse(@body)
       else
@@ -21,7 +21,7 @@ module Mongrel2
       raise "Netstring did not end in ','" unless rest[len].chr == ','
       [ rest[0...len], rest[(len+1)..-1] ]
     end
-    
+
     def self.parse(msg)
       sender, conn_id, path, rest = msg.split(' ', 4)
       headers, head_rest = parse_netstring(rest)
@@ -32,7 +32,7 @@ module Mongrel2
       self.new(sender, conn_id, path, headers, body)
     end
 
-    def disconnect? 
+    def disconnect?
       if self.headers['METHOD'] == 'JSON'
         @data['type'] == 'disconnect'
       end
@@ -41,4 +41,4 @@ module Mongrel2
 
   end # class Request
 end # mod Mongrel2
-    
+

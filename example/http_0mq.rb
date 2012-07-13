@@ -20,7 +20,7 @@ class Http0MQHandler < Mongrel2::Handler
 
   def process(req)
     response = "<pre>\nSENDER: %s\nIDENT:%s\nPATH: %s\nHEADERS:%s\nBODY:%s</pre>" % [
-      req.sender.inspect, req.conn_id.inspect, req.path.inspect, 
+      req.sender.inspect, req.conn_id.inspect, req.path.inspect,
       JSON.generate(req.headers).inspect, req.body.inspect]
     puts response
     response

@@ -15,9 +15,9 @@ module Mongrel2
             request = Fiber.yield
             next
           end
-            
+
           # get the response from on_request
-          response = process(request) 
+          response = process(request)
 
           # run the response through a filter
           response = after_process(response, request)
