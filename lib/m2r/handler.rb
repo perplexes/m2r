@@ -1,4 +1,4 @@
-require 'm2r/connection'
+require 'm2r'
 
 module M2R
   class Handler

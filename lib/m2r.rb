@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'ffi-rzmq'
+require 'json'
 
 module M2R
   class << self
@@ -12,3 +13,7 @@ module M2R
 end
 
 Mongrel2 = M2R
+
+require 'm2r/request'
+require 'm2r/connection'
+require 'm2r/handler'

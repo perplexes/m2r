@@ -1,5 +1,4 @@
-require 'm2r/request'
-require 'json'
+require 'm2r'
 
 module M2R
   # A Connection object manages the connection between your handler
