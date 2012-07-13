@@ -1,4 +1,4 @@
-require 'helper'
+require 'test_helper'
 
 class TestM2r < MiniTest::Unit::TestCase
   def test_mongrel2_context_getter

@@ -1,4 +1,4 @@
-require 'helper'
+require 'test_helper'
 
 class TestConnection < MiniTest::Unit::TestCase
   def test_receive_message
