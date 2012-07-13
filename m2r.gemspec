@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "ffi",      ">= 1.0.0"
   gem.add_dependency "json"
 
+  gem.add_development_dependency "rack"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "minitest"
 end
