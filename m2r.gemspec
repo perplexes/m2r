@@ -10,14 +10,11 @@ Gem::Specification.new do |gem|
   gem.license          = "MIT"
 
   gem.files            = [
-    ".document",
-    ".gitignore",
     "ISSUES",
     "LICENSE",
     "README.md",
     "Rakefile",
     "Gemfile",
-    "VERSION",
     "benchmarks/jruby",
     "example/http_0mq.rb",
     "example/lobster.ru",
