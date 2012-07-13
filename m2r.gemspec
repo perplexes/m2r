@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.summary          = "Mongrel2 interface and handler library for JRuby."
   gem.license          = "MIT"
 
-  gem.files            = Dir.glob("{lib,example,test}/**/*") + %w(ISSUES LICENSE README.md Rakefile Gemfile m2r.gemspec)
+  gem.files            = Dir.glob("{lib,example,test}/**/*") + %w(LICENSE README.md Rakefile Gemfile m2r.gemspec)
   gem.test_files       = Dir.glob("test/**/*")
   gem.extra_rdoc_files = ["LICENSE", "README.md" ]
 
@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.version          = Mongrel2::VERSION
 
   gem.add_dependency "ffi-rzmq", "~> 0.9.3"
+  gem.add_dependency "ffi",      ">= 1.0.0"
   gem.add_dependency "json"
 
   gem.add_development_dependency "rake"
