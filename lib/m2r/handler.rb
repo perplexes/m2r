@@ -1,9 +1,11 @@
-module Mongrel2
+require 'm2r/connection'
+
+module M2R
   class Handler
     attr_accessor :connection
     def initialize(sender_uuid, subscribe_address, publish_address)
-      @connection = Mongrel2::Connection.new(sender_uuid,
-                      subscribe_address, publish_address)
+      @connection = M2R::Connection.new(sender_uuid,
+                                        subscribe_address, publish_address)
     end
 
     # Callback for when the handler is waiting for a request

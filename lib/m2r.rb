@@ -1,6 +1,6 @@
-require 'connection'
-require 'request'
-require 'handler'
+require 'rubygems'
 
-module Mongrel2
+module M2R
 end
+
+Mongrel2 = M2R

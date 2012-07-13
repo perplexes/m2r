@@ -1,4 +1,6 @@
-module Mongrel2
+require 'm2r'
+
+module M2R
   class Request
     attr_reader :sender, :conn_id, :path, :headers, :body
     def initialize(sender, conn_id, path, headers, body)
@@ -39,6 +41,6 @@ module Mongrel2
     end
     alias :is_disconnect :disconnect?
 
-  end # class Request
-end # mod Mongrel2
+  end
+end
 

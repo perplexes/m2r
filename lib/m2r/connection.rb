@@ -1,19 +1,10 @@
-# On OSX:
-# sudo port install zmq
-# sudo gem install zmq
-# RUBY_ENGINE = 'ruby'
-require 'rubygems'
-gem 'ffi-rzmq'
-gem 'json'
+require 'm2r/request'
 require 'ffi-rzmq'
 require 'json'
 
-$: << File.dirname(__FILE__)
-require 'request'
-
 CTX = ZMQ::Context.new(1)
 
-module Mongrel2
+module M2R
   # A Connection object manages the connection between your handler
   # and a Mongrel2 server (or servers).  It can receive raw requests
   # or JSON encoded requests whether from HTTP or MSG request types,
@@ -156,5 +147,5 @@ module Mongrel2
       504 => 'Gateway Timeout',
       505 => 'HTTP Version Not Supported'
     }
-  end # class Connection
-end # mod Mongrel2
+  end
+end

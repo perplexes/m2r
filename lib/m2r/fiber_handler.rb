@@ -1,4 +1,6 @@
-module Mongrel2
+require 'm2r/handler'
+
+module M2R
   class FiberHandler < Handler
     def initialize(*args)
       raise "This handler is just around for testing. don't use it, it'll suck."
