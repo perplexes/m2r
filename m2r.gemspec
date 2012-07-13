@@ -9,30 +9,8 @@ Gem::Specification.new do |gem|
   gem.summary          = "Mongrel2 interface and handler library for JRuby."
   gem.license          = "MIT"
 
-  gem.files            = [
-    "ISSUES",
-    "LICENSE",
-    "README.md",
-    "Rakefile",
-    "Gemfile",
-    "benchmarks/jruby",
-    "example/http_0mq.rb",
-    "example/lobster.ru",
-    "example/rack_handler.rb",
-    "lib/connection.rb",
-    "lib/fiber_handler.rb",
-    "lib/handler.rb",
-    "lib/m2r.rb",
-    "lib/request.rb",
-    "lib/m2r/version.rb",
-    "m2r.gemspec",
-    "test/helper.rb",
-    "test/test_m2r.rb"
-  ]
-  gem.test_files       = [
-    "test/test_helper.rb",
-    "test/m2r_test.rb"
-  ]
+  gem.files            = Dir.glob("{lib,example,test}/**/*") + %w(ISSUES LICENSE README.md Rakefile Gemfile m2r.gemspec)
+  gem.test_files       = Dir.glob("test/**/*")
   gem.extra_rdoc_files = ["LICENSE", "README.md" ]
 
   gem.name             = "m2r"
