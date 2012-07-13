@@ -59,7 +59,9 @@ module M2R
         response = after_process(response, request)
 
         # send it back to the server on the PUB socket
-        @connection.reply_http(request, response)
+        headers = {}
+        headers['Content-Length'] = response.bytesize
+        @connection.reply(request, Response.new(200, headers, response))
 
         after_reply(request, response)
       end
