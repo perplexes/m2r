@@ -40,8 +40,7 @@ Gem::Specification.new do |gem|
   gem.require_path     = "lib"
   gem.version          = Mongrel2::VERSION
 
-  gem.add_dependency "ffi"
-  gem.add_dependency "ffi-rzmq"
+  gem.add_dependency "ffi-rzmq", "~> 0.9.3"
   gem.add_dependency "json"
 
   gem.add_development_dependency "rake"
