@@ -1,7 +1,17 @@
+# An example of running Rack application.
+#
+# Running this example:
+#
+#   bundle exec rackup -I../lib lobster.ru
+#
+#   m2sh load -config mongrel2.conf
+#   m2sh start -name main
+#
+#   curl http://localhost:6767
+
 require 'rack/lobster'
-$: << ::File.dirname(__FILE__)
-require 'rack_handler'
+require './rack_handler'
 
 use Rack::ShowExceptions
-puts "Lobster at http://localhost:6767/handlertest"
 Rack::Handler::Mongrel2.run Rack::Lobster.new
+

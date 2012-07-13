@@ -16,12 +16,13 @@ Gem::Specification.new do |gem|
   gem.name             = "m2r"
   gem.date             = "2010-10-23"
   gem.require_path     = "lib"
-  gem.version          = Mongrel2::VERSION
+  gem.version          = M2R::VERSION
 
   gem.add_dependency "ffi-rzmq", "~> 0.9.3"
   gem.add_dependency "ffi",      ">= 1.0.0"
   gem.add_dependency "json"
 
+  gem.add_development_dependency "rack"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "minitest"
 end

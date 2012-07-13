@@ -1,29 +1,20 @@
-require 'rubygems'
+require 'm2r/connection'
 require 'rack'
 require 'stringio'
-# require 'ruby-debug'
-# Debugger.start
-# gem install ruby-debug19 -- --with-ruby-include=$HOME/.rvm/src/ruby-1.9.2-head
-
-$: << ::File.expand_path(::File.dirname(__FILE__) + '/../lib')
-require 'connection'
-
-$sender_id = "70D107AB-19F5-44AE-A2D0-2326A167D8D7"
+require 'securerandom'
 
 module Rack
   module Handler
     class Mongrel2
       def self.run(app, receive = "tcp://127.0.0.1:9997", send = "tcp://127.0.0.1:9996")
-        conn = ::Mongrel2::Connection.new($sender_id, receive, send)
-        @running = true
-        trap("SIGINT") do
-          @running = false
-        end
+        connection = M2R::Connection.new(SecureRandom.uuid, receive, send)
+        @running   = true
+        trap("SIGINT") { @running = false }
 
         while @running
           puts "WAITING FOR REQUEST"
 
-          req = conn.recv # Caution: Abort traps on SIGINT :/
+          req = connection.recv
           if req.disconnect?
             puts "DICONNECT"
             next
@@ -34,20 +25,18 @@ module Rack
             req.headers["PATTERN"].split('(', 2).first.gsub(/\/$/, '')
 
           env = {
-            "rack.version" => Rack::VERSION,
-            "rack.url_scheme" => "http",
-            "rack.input" => StringIO.new(req.body),
-            "rack.errors" => $stderr,
-            "rack.multithread" => true,
+            "rack.version"      => Rack::VERSION,
+            "rack.url_scheme"   => "http",
+            "rack.input"        => StringIO.new(req.body),
+            "rack.errors"       => $stderr,
+            "rack.multithread"  => true,
             "rack.multiprocess" => true,
-            "rack.run_once" => false,
-
-            "mongrel2.pattern" => req.headers["PATTERN"],
-
-            "REQUEST_METHOD" => req.headers["METHOD"],
-            "SCRIPT_NAME" => script_name,
-            "PATH_INFO" => req.headers["PATH"].gsub(script_name, ''),
-            "QUERY_STRING" => req.headers["QUERY"]
+            "rack.run_once"     => false,
+            "mongrel2.pattern"  => req.headers["PATTERN"],
+            "REQUEST_METHOD"    => req.headers["METHOD"],
+            "SCRIPT_NAME"       => script_name,
+            "PATH_INFO"         => req.headers["PATH"].gsub(script_name, ''),
+            "QUERY_STRING"      => req.headers["QUERY"]
           }
 
           env["SERVER_NAME"], env["SERVER_PORT"] = req.headers["host"].split(':', 2)
@@ -61,7 +50,7 @@ module Rack
           status, headers, rack_response = app.call(env)
           body = ""
           rack_response.each{|b| body << b}
-          conn.reply_http(req, body, status, headers)
+          connection.reply_http(req, body, status, headers)
         end
       end
     end
