@@ -30,8 +30,8 @@ Gem::Specification.new do |gem|
     "test/test_m2r.rb"
   ]
   gem.test_files       = [
-    "test/helper.rb",
-    "test/test_m2r.rb"
+    "test/test_helper.rb",
+    "test/m2r_test.rb"
   ]
   gem.extra_rdoc_files = ["LICENSE", "README.md" ]
 
@@ -44,5 +44,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "json"
 
   gem.add_development_dependency "rake"
-  gem.add_development_dependency "shoulda"
+  gem.add_development_dependency "minitest"
 end
