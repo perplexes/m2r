@@ -17,5 +17,6 @@ Mongrel2 = M2R
 
 require 'm2r/request'
 require 'm2r/response'
+require 'm2r/response/ok'
 require 'm2r/connection'
 require 'm2r/handler'

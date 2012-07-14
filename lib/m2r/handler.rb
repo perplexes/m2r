@@ -61,9 +61,7 @@ module M2R
       response = process(request)
       response = after_process(request, response)
 
-      headers = {}
-      headers['Content-Length'] = response.bytesize
-      @connection.reply(request, Response.new(200, headers, response))
+      @connection.reply(request, response)
 
       after_reply(request, response)
     end

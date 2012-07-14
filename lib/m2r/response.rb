@@ -2,8 +2,8 @@ require 'm2r'
 
 module M2R
   class Response
-    VERSION      = "HTTP/1.1"
-    CRLF         = "\r\n"
+    VERSION      = "HTTP/1.1".freeze
+    CRLF         = "\r\n".freeze
     STATUS_CODES = {
       100 => 'Continue',
       101 => 'Switching Protocols',
@@ -72,6 +72,7 @@ module M2R
       end
       response << CRLF
       response << body
+      response
     end
   end
 end
