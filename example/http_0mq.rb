@@ -18,7 +18,7 @@ class Http0MQHandler < M2R::Handler
     puts "WAITING FOR REQUEST"
   end
 
-  def on_disconnect
+  def on_disconnect(request)
     puts "DISCONNECT"
   end
 
@@ -39,6 +39,6 @@ sender_id = SecureRandom.uuid
 pull_port = "tcp://127.0.0.1:9997"
 pub_port  = "tcp://127.0.0.1:9996"
 
-handler   = Http0MQHandler.new(sender_id, pull_port, pub_port)
+handler   = Http0MQHandler.for(sender_id, pull_port, pub_port)
 handler.listen
 

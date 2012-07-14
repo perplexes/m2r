@@ -1,8 +1,11 @@
 require 'm2r'
+require 'm2r/request/upload'
 
 module M2R
   class Request
     attr_reader :sender, :conn_id, :path, :headers, :body
+
+    include Upload
 
     def initialize(sender, conn_id, path, headers, body)
       @sender  = sender
@@ -10,7 +13,7 @@ module M2R
       @path    = path
       @headers = headers
       @body    = body
-      @data    = json? ? JSON.parse(@body) : {}
+      @data    = JSON.parse(@body) if json?
     end
 
     def self.parse(msg)
@@ -30,7 +33,6 @@ module M2R
     def disconnect?
       json? && @data['type'] == 'disconnect'
     end
-    alias :is_disconnect :disconnect?
 
     def close?
       headers['VERSION']    == 'HTTP/1.0' ||
@@ -42,5 +44,6 @@ module M2R
     def json?
       method == 'JSON'
     end
+
   end
 end
