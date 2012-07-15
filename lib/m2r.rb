@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'ffi-rzmq'
-require 'json'
+require 'multi_json'
 require 'tnetstring'
 
 module M2R

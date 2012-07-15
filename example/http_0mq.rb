@@ -28,7 +28,7 @@ class Http0MQHandler < M2R::Handler
 SENDER:  #{request.sender}
 IDENT:   #{request.conn_id}
 PATH:    #{request.path}
-HEADERS: #{JSON.pretty_generate(request.headers)}
+HEADERS: #{MultiJson.dump(request.headers, :pretty => true)}
 BODY:    #{request.body.inspect}
 </pre>
 EOF

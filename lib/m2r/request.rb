@@ -13,7 +13,7 @@ module M2R
       @path    = path
       @headers = headers
       @body    = body
-      @data    = JSON.parse(@body) if json?
+      @data    = MultiJson.load(@body) if json?
     end
 
     def self.parse(msg)
@@ -21,7 +21,7 @@ module M2R
 
       headers, rest = TNetstring.parse(rest)
       body, _       = TNetstring.parse(rest)
-      headers       = JSON.parse(headers)
+      headers       = MultiJson.load(headers)
 
       self.new(sender, conn_id, path, headers, body)
     end

@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "ffi-rzmq", "~> 0.9.3"
   gem.add_dependency "ffi",      ">= 1.0.0"
-  gem.add_dependency "json"
+  gem.add_dependency "multi_json"
   gem.add_dependency "tnetstring"
 
   gem.add_development_dependency "rack"
