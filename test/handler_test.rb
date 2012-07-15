@@ -49,7 +49,7 @@ class HandlerTest < MiniTest::Unit::TestCase
 
   def test_lifecycle_for_disconnect
     connection = Class.new do
-      def recv
+      def receive
         M2R::Request.new("sender", "conn_id", "/path", {"METHOD" => "JSON"}, '{"type":"disconnect"}')
       end
     end.new
@@ -66,7 +66,7 @@ class HandlerTest < MiniTest::Unit::TestCase
         @replies << params
       end
 
-      def recv
+      def receive
         M2R::Request.new("sender", "conn_id", "/path", {"x-mongrel2-upload-start" => "/tmp/file"}, '')
       end
     end.new
@@ -83,7 +83,7 @@ class HandlerTest < MiniTest::Unit::TestCase
         @replies << params
       end
 
-      def recv
+      def receive
         M2R::Request.new("sender", "conn_id", "/path", {"x-mongrel2-upload-start" => "/tmp/file", "x-mongrel2-upload-done" => "/tmp/file"}, '')
       end
     end.new

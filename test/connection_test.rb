@@ -15,6 +15,6 @@ class ConnectionTest < MiniTest::Unit::TestCase
 
     push.send_string("1c5fd481-1121-49d8-a706-69127975db1a ebb407b2-49aa-48a5-9f96-9db121051484 / 2:{},0:,", ZMQ::NOBLOCK)
 
-    assert_instance_of M2R::Request, connection.recv
+    assert_instance_of M2R::Request, connection.receive
   end
 end

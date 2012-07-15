@@ -15,7 +15,6 @@ module M2R
       @request_socket.recv_string(msg = "")
       Request.parse(msg)
     end
-    alias :recv :receive
 
     def reply(request, response_or_string)
       deliver(request.sender, request.conn_id, response_or_string.to_s)

@@ -47,7 +47,7 @@ module M2R
       loop do
         on_wait
         break if stop?
-        request_lifecycle(@connection.recv)
+        request_lifecycle(@connection.receive)
       end
     end
 
