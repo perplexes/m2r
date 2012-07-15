@@ -1,4 +1,5 @@
 require 'm2r'
+require 'm2r/response/content_length'
 
 module M2R
   class Response
