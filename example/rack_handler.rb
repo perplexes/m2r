@@ -14,7 +14,7 @@ module Rack
         while @running
           puts "WAITING FOR REQUEST"
 
-          req = connection.recv
+          req = connection.receive
           if req.disconnect?
             puts "DICONNECT"
             next

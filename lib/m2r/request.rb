@@ -1,46 +1,49 @@
 require 'm2r'
+require 'm2r/request/upload'
 
 module M2R
   class Request
     attr_reader :sender, :conn_id, :path, :headers, :body
+
+    include Upload
+
     def initialize(sender, conn_id, path, headers, body)
-      @sender = sender
+      @sender  = sender
       @conn_id = conn_id
-      @path = path
+      @path    = path
       @headers = headers
-      @body = body
-
-      if headers['METHOD'] == 'JSON'
-        @data = JSON.parse(@body)
-      else
-        @data = {}
-      end
-    end
-
-    def self.parse_netstring(ns)
-      len, rest = ns.split(':', 2)
-      len = len.to_i
-      raise "Netstring did not end in ','" unless rest[len].chr == ','
-      [ rest[0...len], rest[(len+1)..-1] ]
+      @body    = body
+      @data    = JSON.parse(@body) if json?
     end
 
     def self.parse(msg)
       sender, conn_id, path, rest = msg.split(' ', 4)
-      headers, head_rest = parse_netstring(rest)
-      body, _ = parse_netstring(head_rest)
 
-      headers = JSON.parse(headers)
+      headers, rest = TNetstring.parse(rest)
+      body, _       = TNetstring.parse(rest)
+      headers       = JSON.parse(headers)
 
       self.new(sender, conn_id, path, headers, body)
     end
 
-    def disconnect?
-      if self.headers['METHOD'] == 'JSON'
-        @data['type'] == 'disconnect'
-      end
+    def method
+      headers['METHOD']
     end
-    alias :is_disconnect :disconnect?
+
+    def disconnect?
+      json? && @data['type'] == 'disconnect'
+    end
+
+    def close?
+      headers['VERSION']    == 'HTTP/1.0' ||
+      headers['connection'] == 'close'
+    end
+
+    protected
+
+    def json?
+      method == 'JSON'
+    end
 
   end
 end
-

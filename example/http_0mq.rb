@@ -10,7 +10,7 @@
 #
 #   curl http://localhost:6767
 
-require 'm2r/handler'
+require 'm2r'
 require 'securerandom'
 
 class Http0MQHandler < M2R::Handler
@@ -18,12 +18,12 @@ class Http0MQHandler < M2R::Handler
     puts "WAITING FOR REQUEST"
   end
 
-  def on_disconnect
+  def on_disconnect(request)
     puts "DISCONNECT"
   end
 
   def process(request)
-    <<EOF
+    body = <<EOF
 <pre>
 SENDER:  #{request.sender}
 IDENT:   #{request.conn_id}
@@ -32,6 +32,9 @@ HEADERS: #{JSON.pretty_generate(request.headers)}
 BODY:    #{request.body.inspect}
 </pre>
 EOF
+    response = M2R::Response.new(200, {}, body)
+    response.extend(M2R::Response::ContentLength)
+    return response
   end
 end
 
@@ -39,6 +42,6 @@ sender_id = SecureRandom.uuid
 pull_port = "tcp://127.0.0.1:9997"
 pub_port  = "tcp://127.0.0.1:9996"
 
-handler   = Http0MQHandler.new(sender_id, pull_port, pub_port)
+handler   = Http0MQHandler.for(sender_id, pull_port, pub_port)
 handler.listen
 
