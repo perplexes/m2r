@@ -2,7 +2,7 @@
 #
 # Running this example:
 #
-#   bundle exec rackup -I../lib -a mongrel2 lobster.ru
+#   bundle exec rackup -I../lib -s mongrel2 lobster.ru
 #
 #   m2sh load -config mongrel2.conf
 #   m2sh start -name main
