@@ -2,7 +2,7 @@
 #
 # Running this example:
 #
-#   bundle exec rackup -I../lib lobster.ru
+#   bundle exec rackup -I../lib -a mongrel2 lobster.ru
 #
 #   m2sh load -config mongrel2.conf
 #   m2sh start -name main
@@ -10,9 +10,5 @@
 #   curl http://localhost:6767
 
 require 'rack/lobster'
-require './rack_handler'
-
-use Rack::ShowExceptions
 use Rack::ContentLength
-
-Rack::Handler::Mongrel2.run Rack::Lobster.new
+run Rack::Lobster.new
