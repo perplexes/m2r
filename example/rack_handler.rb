@@ -7,7 +7,7 @@ module Rack
   module Handler
     class Mongrel2
       def self.run(app, receive = "tcp://127.0.0.1:9997", send = "tcp://127.0.0.1:9996")
-        connection = M2R::Connection.new(SecureRandom.uuid, receive, send)
+        connection = M2R::Connection.for(SecureRandom.uuid, receive, send)
         @running   = true
         trap("SIGINT") { @running = false }
 
