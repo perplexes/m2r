@@ -8,7 +8,7 @@ module M2R
     end
 
     def self.for(sender_uuid, subscribe_address, publish_address)
-      new(Connection.new(sender_uuid, subscribe_address, publish_address))
+      new(Connection.for(sender_uuid, subscribe_address, publish_address))
     end
 
     # Callback for when the handler is waiting for a request
