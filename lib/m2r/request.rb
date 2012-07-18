@@ -4,7 +4,7 @@ require 'm2r/headers'
 
 module M2R
   class BaseRequest
-    MongrelHeaders = %w(PATTERN METHOD PATH QUERY host).map(&:downcase).map(&:freeze).freeze
+    MongrelHeaders = %w(pattern method path query).map(&:freeze).freeze
     attr_reader :sender, :conn_id, :path, :headers, :body, :mongrel
 
     def initialize(sender, conn_id, path, headers, body)
@@ -46,10 +46,6 @@ module M2R
       mongrel['query']
     end
 
-    def host
-      mongrel['host']
-    end
-
     def path
       mongrel['path']
     end
@@ -68,6 +64,10 @@ module M2R
 
     def http1_0?
       header(version)    == 'HTTP/1.0'
+    end
+
+    def host
+      header('host')
     end
 
     def connection_close?
