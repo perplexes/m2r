@@ -22,7 +22,7 @@ module Rack
 
           script_name = ENV["RACK_RELATIVE_URL_ROOT"] ||
             # PATTERN is like:  /test/(.*.json) or /handlertest
-            req.headers["PATTERN"].split('(', 2).first.gsub(/\/$/, '')
+            req.pattern.split('(', 2).first.gsub(/\/$/, '')
 
           env = {
             "rack.version"      => Rack::VERSION,
@@ -32,14 +32,14 @@ module Rack
             "rack.multithread"  => true,
             "rack.multiprocess" => true,
             "rack.run_once"     => false,
-            "mongrel2.pattern"  => req.headers["PATTERN"],
-            "REQUEST_METHOD"    => req.headers["METHOD"],
+            "mongrel2.pattern"  => req.pattern,
+            "REQUEST_METHOD"    => req.method,
             "SCRIPT_NAME"       => script_name,
-            "PATH_INFO"         => req.headers["PATH"].gsub(script_name, ''),
-            "QUERY_STRING"      => req.headers["QUERY"]
+            "PATH_INFO"         => req.path.gsub(script_name, ''),
+            "QUERY_STRING"      => req.query
           }
 
-          env["SERVER_NAME"], env["SERVER_PORT"] = req.headers["host"].split(':', 2)
+          env["SERVER_NAME"], env["SERVER_PORT"] = req.host.split(':', 2)
           req.headers.each do |key, val|
             unless key =~ /content_(type|length)/i
               key = "HTTP_#{key.upcase}"
