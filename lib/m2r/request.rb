@@ -82,6 +82,7 @@ module M2R
 
     def parse_headers(headers)
       mongrel_headers.each do |header|
+        next unless headers.key?(header)
         mongrel[header] = headers.delete(header)
       end
       return headers

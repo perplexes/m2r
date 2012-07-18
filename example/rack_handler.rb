@@ -12,11 +12,9 @@ module Rack
         trap("SIGINT") { @running = false }
 
         while @running
-          puts "WAITING FOR REQUEST"
 
           req = connection.receive
           if req.disconnect?
-            puts "DICONNECT"
             next
           end
 
@@ -40,13 +38,7 @@ module Rack
           }
 
           env["SERVER_NAME"], env["SERVER_PORT"] = req.host.split(':', 2)
-          req.headers.each do |key, val|
-            unless key =~ /content_(type|length)/i
-              key = "HTTP_#{key.upcase}"
-            end
-            env[key] = val
-          end
-
+          req.headers.rackify(env)
           status, headers, rack_response = app.call(env)
           body = ""
           rack_response.each{|b| body << b}
