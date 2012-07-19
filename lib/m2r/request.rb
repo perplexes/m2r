@@ -3,16 +3,18 @@ require 'm2r/request/upload'
 require 'm2r/headers'
 
 module M2R
-  class BaseRequest
-    MongrelHeaders = %w(pattern method path query).map(&:freeze).freeze
-    attr_reader :sender, :conn_id, :path, :headers, :body, :mongrel
+  class Request
+    MONGREL2_HEADERS = %w(pattern method path query).map(&:freeze).freeze
+
+    include Upload
+
+    attr_reader :sender, :conn_id, :path, :body
 
     def initialize(sender, conn_id, path, headers, body)
-      @mongrel = {}
+      @http_headers, @mongrel_headers = split_headers(headers)
       @sender  = sender
       @conn_id = conn_id
       @path    = path
-      @headers = parse_headers(headers)
       @body    = body
       @data    = MultiJson.load(@body) if json?
     end
@@ -26,75 +28,55 @@ module M2R
       self.new(sender, conn_id, path, headers, body)
     end
 
-    def disconnect?
-      json? && @data['type'] == 'disconnect'
-    end
-
-    def close?
-      http1_0? || connection_close?
+    def headers
+      @http_headers
     end
 
     def pattern
-      mongrel['pattern']
+      @mongrel_headers['pattern']
     end
 
     def method
-      mongrel['method']
+      @mongrel_headers['method']
     end
 
     def query
-      mongrel['query']
+      @mongrel_headers['query']
     end
 
-    def path
-      mongrel['path']
+    def disconnect?
+      json? and @data['type'] == 'disconnect'
     end
 
-    def header(header)
-      headers[header]
-    end
-
-    def version
-      header('version')
-    end
-
-    def connection
-      header('connection')
-    end
-
-    def http1_0?
-      header(version)    == 'HTTP/1.0'
-    end
-
-    def host
-      header('host')
-    end
-
-    def connection_close?
-      connection.downcase == 'close'
+    def close?
+      unsupported_version? or connection_close?
     end
 
     protected
+
+    def mongrel_headers
+      (super if defined?(super)).to_a + MONGREL2_HEADERS
+    end
+
+    def unsupported_version?
+      @http_headers['version'] != 'HTTP/1.1'
+    end
+
+    def connection_close?
+      @http_headers['connection'] == 'close'
+    end
 
     def json?
       method == 'JSON'
     end
 
-    def parse_headers(headers)
+    def split_headers(headers)
+      mongrel = Headers.new
       mongrel_headers.each do |header|
-        next unless headers.key?(header)
+        next unless headers[header]
         mongrel[header] = headers.delete(header)
       end
-      return headers
+      return headers, mongrel
     end
-
-    def mongrel_headers
-      MongrelHeaders
-    end
-
-  end
-
-  class Request < BaseRequest
-    include Upload
   end
 end

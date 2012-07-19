@@ -1,18 +1,28 @@
 require 'delegate'
 
 module M2R
-  class Headers < DelegateClass(Hash)
-
+  class Headers
     def initialize(hash = {})
-      downcased = hash.inject({}) do |headers,(header,value)|
-        headers[header.downcase] = value
+      @headers = hash.inject({}) do |headers,(header,value)|
+        headers[transform_key(header)] = value
         headers
       end
-      super(downcased)
+    end
+
+    def [](header)
+      @headers[transform_key(header)]
+    end
+
+    def []=(header, value)
+      @headers[transform_key(header)] = value
+    end
+
+    def delete(header)
+      @headers.delete(transform_key(header))
     end
 
     def rackify(env = {})
-      each do |header, value|
+      @headers.each do |header, value|
         key = "HTTP_" + header.upcase.gsub("-", "_")
         env[key] = value
       end
@@ -21,5 +31,10 @@ module M2R
       env
     end
 
+    protected
+
+    def transform_key(key)
+      key.to_s.downcase
+    end
   end
 end
