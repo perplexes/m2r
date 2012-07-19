@@ -23,15 +23,14 @@ class HandlerTest < MiniTest::Unit::TestCase
   end
 
   def disconnect_request
-    M2R::Request.new("sender", "conn_id", "/path", {"METHOD" => "JSON"}, '{"type":"disconnect"}')
+    M2R::Request.new("sender", "conn_id", "/path", M2R::Headers.new({"METHOD" => "JSON"}), '{"type":"disconnect"}')
   end
 
   def upload_start_request
-    M2R::Request.new("sender", "conn_id", "/path", {"x-mongrel2-upload-start" => "/tmp/file"}, '')
+    M2R::Request.new("sender", "conn_id", "/path", M2R::Headers.new({"x-mongrel2-upload-start" => "/tmp/file"}), '')
   end
 
   def upload_done_request
-    M2R::Request.new("sender", "conn_id", "/path", {"x-mongrel2-upload-start" => "/tmp/file", "x-mongrel2-upload-done" => "/tmp/file"}, '')
+    M2R::Request.new("sender", "conn_id", "/path", M2R::Headers.new({"x-mongrel2-upload-start" => "/tmp/file", "x-mongrel2-upload-done" => "/tmp/file"}), '')
   end
 end
-
