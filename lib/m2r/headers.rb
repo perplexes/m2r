@@ -12,7 +12,7 @@ module M2R
     end
 
     def rackify(env = {})
-      inject(env) do |rack, (header, value)|
+      each do |header, value|
         key = "HTTP_" + header.upcase.gsub("-", "_")
         env[key] = value
       end
