@@ -1,5 +1,5 @@
 require 'rack/handler'
-require 'm2r/adapter/rack'
+require 'm2r/rack_handler'
 require 'securerandom'
 
 module Rack
@@ -14,7 +14,7 @@ module Rack
       def self.run(app, options = {})
         options    = DEFAULT_OPTIONS.merge(options)
         connection = M2R::Connection.new(options[:sender_id], options[:recv_addr], options[:send_addr])
-        adapter    = M2R::Adapter::Rack.new(app, connection)
+        adapter    = M2R::RackHandler.new(app, connection)
         adapter.listen
       end
 
