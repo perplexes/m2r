@@ -2,6 +2,8 @@ require 'delegate'
 
 module M2R
   class Headers
+    include Enumerable
+
     def initialize(hash = {})
       @headers = hash.inject({}) do |headers,(header,value)|
         headers[transform_key(header)] = value
@@ -19,6 +21,10 @@ module M2R
 
     def delete(header)
       @headers.delete(transform_key(header))
+    end
+
+    def each
+      @headers.each { |k, v| yield [k, v] }
     end
 
     def rackify(env = {})
