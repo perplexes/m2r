@@ -18,9 +18,9 @@ Installation
 You'll need following prerequisites first:
 
 * [Mongrel2](http://mongrel2.org/downloads)
-* [Zero MQ](http://www.zeromq.org/area:download)
+* [ØMQ](http://www.zeromq.org/area:download)
 
-Next, in your Gemfile add:
+Next, in your `Gemfile` add:
 
 ```ruby
 gem 'm2r'
