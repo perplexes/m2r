@@ -11,11 +11,7 @@ module M2R
     end
 
     def process(request)
-      headers = request.headers.dup
-
-      pattern, path = headers.delete('PATTERN'), headers.delete('PATH')
-      script_name   = pattern.split('(', 2).first.gsub(/\/$/, '')
-      path_info     = path.gsub(script_name, '')
+      script_name = request.pattern.split('(', 2).first.gsub(/\/$/, '')
 
       rack_input = StringIO.new(request.body)
       rack_input.set_encoding(Encoding::BINARY) if rack_input.respond_to?(:set_encoding)
@@ -23,8 +19,8 @@ module M2R
       env = {
         'REQUEST_METHOD'    => request.method,
         'SCRIPT_NAME'       => script_name,
-        'PATH_INFO'         => path_info,
-        'QUERY_STRING'      => headers.delete('QUERY') || "",
+        'PATH_INFO'         => request.path.gsub(script_name, ''),
+        'QUERY_STRING'      => request.query || "",
         'rack.version'      => ::Rack::VERSION,
         'rack.errors'       => $stderr,
         'rack.multithread'  => false,
@@ -33,17 +29,13 @@ module M2R
         'rack.url_scheme'   => https? ? 'https' : 'http',
         'rack.input'        => rack_input,
       }
-      env['SERVER_NAME'], env['SERVER_PORT'] = headers['host'].split(':', 2)
-
-      headers.each do |key, val|
-        key      = "HTTP_#{key.tr('-', '_').upcase}"
-        env[key] = val unless %w(HTTP_CONTENT_LENGTH HTTP_CONTENT_TYPE).include?(key)
-      end
+      env['SERVER_NAME'], env['SERVER_PORT'] = request.headers['Host'].split(':', 2)
+      request.headers.rackify(env)
 
       status, headers, body = @app.call(env)
       buffer = ""
       body.each { |part| buffer << part }
-      return M2R::Response.new(status, headers, buffer)
+      return Response.new(status, headers, buffer)
     end
 
     protected
