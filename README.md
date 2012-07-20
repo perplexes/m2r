@@ -1,7 +1,7 @@
 m2r
 ===
 
-A [mongrel2](http://mongrel2.org/index) backend handler written in Ruby, based on [Zed's Python backend handler](http://mongrel2.org/dir?ci=1bdfff8f050b97df&name=examples/python/mongrel2).
+A [mongrel2](http://mongrel2.org/) backend handler written in Ruby, based on [Zed's Python backend handler](http://mongrel2.org/dir?ci=1bdfff8f050b97df&name=examples/python/mongrel2).
 
 
 [![Build Status](https://secure.travis-ci.org/perplexes/m2r.png)](http://travis-ci.org/perplexes/m2r) [![Dependency Status](https://gemnasium.com/perplexes/m2r.png)](https://gemnasium.com/perplexes/m2r)
