@@ -2,8 +2,8 @@
 require File.expand_path('../lib/m2r/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors          = ["Colin Curtin", "Pradeep Elankumaran"]
-  gem.email            = ["colin.t.curtin+m2r@gmail.com"]
+  gem.authors          = ["Colin Curtin", "Pradeep Elankumaran", "Pawel Pacana", "Robert Pankowecki"]
+  gem.email            = ["colin.t.curtin+m2r@gmail.com", "pawel.pacana+m2r@gmail.com", "robert.pankowecki+m2r@gmail.com"]
   gem.description      = "A Mongrel2 interface and handler library for JRuby, and hopefully other Ruby implementations in the future. Works with Rack, so it works with Rails! (Rails installation guide forthcoming)."
   gem.homepage         = "http://github.com/perplexes/m2r"
   gem.summary          = "Mongrel2 interface and handler library for JRuby."
