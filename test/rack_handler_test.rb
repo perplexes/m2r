@@ -16,6 +16,19 @@ class RackHandlerTest < MiniTest::Unit::TestCase
     assert_equal Rack::Handler::Mongrel2, handler
   end
 
+  def test_options
+    require 'rack/handler/mongrel2'
+    handler = Rack::Handler::Mongrel2
+    options = {
+      :recv_addr => 'tcp://1.2.3.4:1234',
+      :send_addr => 'tcp://1.2.3.4:4321',
+      :sender_id => SecureRandom.uuid
+    }
+    M2R::Connection.expects(:for).with(options[:sender_id], options[:recv_addr], options[:send_addr])
+    M2R::RackHandler.any_instance.stubs(:stop? => true)
+    handler.run(HelloWorld.new, options)
+  end
+
   def test_lint_rack_adapter
     connection = stub
     handler    = M2R::RackHandler.new(app, connection)

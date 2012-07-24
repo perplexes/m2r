@@ -3,11 +3,17 @@ require 'rack'
 
 module M2R
   class RackHandler < Handler
+    attr_accessor :app
+
     def initialize(app, connection)
       @app = app
       super(connection)
 
       trap('INT') { stop }
+    end
+
+    def self.for(app, sender_uuid, subscribe_address, publish_address)
+      new(app, Connection.for(sender_uuid, subscribe_address, publish_address))
     end
 
     def process(request)

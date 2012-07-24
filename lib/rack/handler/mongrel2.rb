@@ -12,9 +12,8 @@ module Rack
       }
 
       def self.run(app, options = {})
-        options    = DEFAULT_OPTIONS.merge(options)
-        connection = M2R::Connection.new(options[:sender_id], options[:recv_addr], options[:send_addr])
-        adapter    = M2R::RackHandler.new(app, connection)
+        options = DEFAULT_OPTIONS.merge(options)
+        adapter = M2R::RackHandler.for(app, options[:sender_id], options[:recv_addr], options[:send_addr])
         adapter.listen
       end
 

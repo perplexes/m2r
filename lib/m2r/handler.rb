@@ -3,6 +3,7 @@ require 'm2r'
 module M2R
   class Handler
     attr_accessor :connection
+
     def initialize(connection)
       @connection = connection
     end
