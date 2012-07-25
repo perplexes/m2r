@@ -21,11 +21,11 @@ module M2R
       require 'rack/handler/mongrel2'
       handler = ::Rack::Handler::Mongrel2
       options = {
-        :recv_addr => 'tcp://1.2.3.4:1234',
-        :send_addr => 'tcp://1.2.3.4:4321',
-        :sender_id => SecureRandom.uuid
+        recv_addr: recv = 'tcp://1.2.3.4:1234',
+        send_addr: send = 'tcp://1.2.3.4:4321',
+        sender_id: id   = SecureRandom.uuid
       }
-      Connection.expects(:for).with(options[:sender_id], options[:recv_addr], options[:send_addr])
+      Connection.expects(:for).with(id, recv, send)
       RackHandler.any_instance.stubs(:stop? => true)
       handler.run(HelloWorld.new, options)
     end
