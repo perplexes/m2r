@@ -1,0 +1,3 @@
+mongrel2:     m2sh start -name main
+rack_handler: bundle exec rackup -I../lib -s mongrel2 lobster.ru
+http_handler: bundle exec ruby -I../lib http_0mq.rb

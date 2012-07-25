@@ -3,15 +3,12 @@
 #
 # Running this example:
 #
-#   bundle exec ruby -I../lib http_0mq.rb
-#
 #   m2sh load -config mongrel2.conf
-#   m2sh start -name main
+#   bundle exec foreman start
 #
-#   curl http://localhost:6767
+# Browse now to http://localhost:6767/handler to see the effect.
 
 require 'm2r'
-require 'securerandom'
 
 class Http0MQHandler < M2R::Handler
   def on_wait
@@ -28,7 +25,7 @@ class Http0MQHandler < M2R::Handler
 SENDER:  #{request.sender}
 IDENT:   #{request.conn_id}
 PATH:    #{request.path}
-HEADERS: #{MultiJson.dump(request.headers, :pretty => true)}
+HEADERS: #{MultiJson.dump(request.headers.inject({}) {|hash,(h,v)| hash[h]=v; hash }, :pretty => true)}
 BODY:    #{request.body.inspect}
 </pre>
 EOF
@@ -38,9 +35,9 @@ EOF
   end
 end
 
-sender_id = SecureRandom.uuid
-pull_port = "tcp://127.0.0.1:9997"
-pub_port  = "tcp://127.0.0.1:9996"
+sender_id = "34f9ceee-cd52-4b7f-b197-88bf2f0ec378"
+pull_port = "tcp://127.0.0.1:9999"
+pub_port  = "tcp://127.0.0.1:9998"
 
 handler   = Http0MQHandler.for(sender_id, pull_port, pub_port)
 handler.listen

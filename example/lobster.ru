@@ -2,12 +2,10 @@
 #
 # Running this example:
 #
-#   bundle exec rackup -I../lib -s mongrel2 lobster.ru
-#
 #   m2sh load -config mongrel2.conf
-#   m2sh start -name main
+#   bundle exec foreman start
 #
-#   curl http://localhost:6767
+# Browse now to http://localhost:6767/rack to see the effect.
 
 require 'rack/lobster'
 use Rack::ContentLength
