@@ -31,5 +31,15 @@ module M2R
         "CONTENT_LENGTH" => "123"
       }, env)
     end
+
+    def test_rackify_empty_headers
+      headers = Headers.new({})
+      env = {"rack.something" => "value"}
+      headers.rackify(env)
+      assert_equal({
+        "rack.something" => "value",
+      }, env)
+    end
+
   end
 end

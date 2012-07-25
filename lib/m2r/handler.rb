@@ -4,12 +4,8 @@ module M2R
   class Handler
     attr_accessor :connection
 
-    def initialize(connection)
-      @connection = connection
-    end
-
-    def self.for(sender_uuid, subscribe_address, publish_address)
-      new(Connection.for(sender_uuid, subscribe_address, publish_address))
+    def initialize(connection_factory)
+      @connection = connection_factory.connection
     end
 
     # Callback for when the handler is waiting for a request

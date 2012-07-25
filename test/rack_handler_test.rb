@@ -21,18 +21,19 @@ module M2R
       require 'rack/handler/mongrel2'
       handler = ::Rack::Handler::Mongrel2
       options = {
-        recv_addr: recv = 'tcp://1.2.3.4:1234',
-        send_addr: send = 'tcp://1.2.3.4:4321',
-        sender_id: id   = SecureRandom.uuid
+        'recv_addr' => recv = 'tcp://1.2.3.4:1234',
+        'send_addr' => send = 'tcp://1.2.3.4:4321',
+        'sender_id' => id   = SecureRandom.uuid
       }
-      Connection.expects(:for).with(id, recv, send)
+      cf = mock(:connection)
+      ConnectionFactory.expects(:new).with(id, recv, send).returns(cf)
       RackHandler.any_instance.stubs(:stop? => true)
       handler.run(HelloWorld.new, options)
     end
 
     def test_lint_rack_adapter
-      connection = stub
-      handler    = RackHandler.new(app, connection)
+      factory    = stub(:connection)
+      handler    = RackHandler.new(app, factory)
       response   = handler.process(root_request)
 
       assert_equal "Hello world!", response.body
