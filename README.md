@@ -32,6 +32,11 @@ And finally run:
 bundle install
 ```
 
+Versioning
+----------
+
+Starting from version `0.1.0` this gem follows [semantic versioning](http://semver.org) policy.
+
 Contributing
 ------------
 
