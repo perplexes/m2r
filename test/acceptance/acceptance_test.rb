@@ -4,7 +4,7 @@ module M2R
   class AcceptanceTest < MiniTest::Unit::TestCase
 
     def test_requests
-      pid = Process.spawn("bundle exec foreman start --procfile=example/Procfile", :pgroup => true)
+      pid = Process.spawn("bundle exec foreman start --procfile=example/Procfile", pgroup: true)
       sleep(1)
       user = TestUser.new(:driver => :mechanize)
       user.visit("/handler")
