@@ -1,27 +1,10 @@
-require 'test_helper'
-require 'bbq/test'
-require 'bbq/test_user'
-require 'capybara'
-require 'capybara/mechanize'
-
-Capybara.app_host = "http://localhost:6767/"
-Capybara.current_driver = :mechanize
-
-class TestUser < Bbq::TestUser
-  include MiniTest::Assertions
-
-  def see!(*args)
-    args.each do |arg|
-      assert has_content?(arg), %Q/Expected to see "#{arg}" but not found./
-    end
-  end
-end
+require 'acceptance_helper'
 
 module M2R
   class AcceptanceTest < MiniTest::Unit::TestCase
 
     def test_requests
-      pid = Process.spawn("bundle exec foreman start --procfile=example/Procfile")
+      pid = Process.spawn("bundle exec foreman start --procfile=example/Procfile", :pgroup => true)
       sleep(1)
       user = TestUser.new(:driver => :mechanize)
       user.visit("/handler")
@@ -33,8 +16,8 @@ module M2R
       user.click_on("flip!")
       assert user.find("pre").text.include?("=:-----(   (  ( ( ( { {{{{{{")
     ensure
-      Process.kill("KILL", pid) if pid
+      Process.kill("SIGTERM", pid) if pid
     end
-
   end
+
 end
