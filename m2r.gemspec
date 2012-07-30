@@ -27,4 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rake"
   gem.add_development_dependency "minitest"
   gem.add_development_dependency "mocha"
+  gem.add_development_dependency "bbq", "= 0.0.4"
+  gem.add_development_dependency "capybara-mechanize", "= 0.3.0"
+  gem.add_development_dependency "activesupport", "~> 3.2.7"
 end
