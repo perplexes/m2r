@@ -1,13 +1,15 @@
+require 'bbq/test'
 require 'bbq/test_user'
 
 class TestUser < Bbq::TestUser
   include MiniTest::Assertions
 
+  def initialize
+    super(:driver => :mechanize)
+  end
+
   def see!(*args)
-    args.each do |arg|
-      assert has_content?(arg), %Q/Expected to see "#{arg}" but not found./
-    end
+    msg = "Expected to see %s but not found"
+    args.each { |arg| assert has_content?(arg), msg % arg }
   end
 end
-
-

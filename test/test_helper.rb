@@ -1,5 +1,7 @@
 require 'minitest/autorun'
 require 'mocha'
 require 'm2r'
-
 require 'support/test_handler'
+require 'support/test_user'
+require 'support/capybara'
+require 'support/process_helper'

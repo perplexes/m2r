@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'ffi-rzmq'
 require 'multi_json'
 require 'tnetstring'
