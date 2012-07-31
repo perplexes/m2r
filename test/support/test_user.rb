@@ -1,5 +1,6 @@
 require 'bbq/test'
 require 'bbq/test_user'
+require 'support/capybara'
 
 class TestUser < Bbq::TestUser
   include MiniTest::Assertions
