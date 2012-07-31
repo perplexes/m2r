@@ -14,13 +14,13 @@ module ProcessHelper
 
   def read_pid_from_file(pidfile)
     pid = nil
-    Timeout.timeout(2) do
+    Timeout.timeout(5) do
       loop do
         begin
           pid = File.read(pidfile)
           break unless pid.empty?
         rescue Errno::ENOENT
-          sleep(0.1)
+          sleep(0.25)
           next
         end
       end
