@@ -1,8 +1,8 @@
 require 'test_helper'
 
 module M2R
-  class AcceptanceTest < MiniTest::Unit::TestCase
-    include ProcessHelper
+  class ExamplesTest < MiniTest::Unit::TestCase
+    include MongrelHelper
 
     def test_rack_example
       user = TestUser.new
