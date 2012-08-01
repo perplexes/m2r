@@ -7,6 +7,11 @@ rvm:
   - jruby-head
   - rbx-19mode
 
+before_install:
+  - sudo add-apt-repository -y ppa:mongrel2/release
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq mongrel2
+
 matrix:
   allow_failures:
     - rvm: ruby-head
