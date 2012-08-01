@@ -19,12 +19,15 @@ Gem::Specification.new do |gem|
   gem.version          = M2R::VERSION
 
   gem.add_dependency "ffi-rzmq", "~> 0.9.3"
-  gem.add_dependency "ffi",      ">= 1.0.0"
+  gem.add_dependency "ffi", ">= 1.0.0"
   gem.add_dependency "multi_json"
   gem.add_dependency "tnetstring"
 
   gem.add_development_dependency "rack"
   gem.add_development_dependency "rake"
-  gem.add_development_dependency "minitest"
-  gem.add_development_dependency "mocha"
+  gem.add_development_dependency "minitest", "= 3.2.0"
+  gem.add_development_dependency "mocha", "~> 0.12.1"
+  gem.add_development_dependency "bbq", "= 0.0.4"
+  gem.add_development_dependency "capybara-mechanize", "= 0.3.0"
+  gem.add_development_dependency "activesupport", "~> 3.2.7"
 end
