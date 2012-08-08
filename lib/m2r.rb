@@ -2,13 +2,16 @@ require 'rubygems'
 require 'ffi-rzmq'
 require 'multi_json'
 require 'tnetstring'
+require 'thread'
 
 module M2R
   class << self
     attr_writer :zmq_context
 
     def zmq_context(threads = 1)
-      @zmq_context ||= ZMQ::Context.new(threads)
+      Thread.exclusive do
+        @zmq_context ||= ZMQ::Context.new(threads)
+      end
     end
   end
 end

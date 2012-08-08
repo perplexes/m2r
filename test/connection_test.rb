@@ -24,10 +24,10 @@ module M2R
     end
 
     def teardown
-      @request_socket.close
-      @response_socket.close
-      @push.close
-      @sub.close
+      @request_socket.close  if @request_socket
+      @response_socket.close if @response_socket
+      @push.close            if @push
+      @sub.close             if @sub
     end
 
     def test_receive_message
