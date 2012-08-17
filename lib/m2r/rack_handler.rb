@@ -15,9 +15,6 @@ module M2R
     def process(request)
       script_name = request.pattern.split('(', 2).first.gsub(/\/$/, '')
 
-      rack_input = StringIO.new(request.body)
-      rack_input.set_encoding(Encoding::BINARY) if rack_input.respond_to?(:set_encoding)
-
       env = {
         'REQUEST_METHOD'    => request.method,
         'SCRIPT_NAME'       => script_name,
@@ -29,7 +26,7 @@ module M2R
         'rack.multiprocess' => true,
         'rack.run_once'     => false,
         'rack.url_scheme'   => https? ? 'https' : 'http',
-        'rack.input'        => rack_input,
+        'rack.input'        => request.body_io
       }
       env['SERVER_NAME'], env['SERVER_PORT'] = request.headers['Host'].split(':', 2)
       request.headers.rackify(env)

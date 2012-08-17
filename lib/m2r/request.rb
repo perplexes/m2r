@@ -1,4 +1,5 @@
 require 'm2r'
+require 'm2r/request/base'
 require 'm2r/request/upload'
 require 'm2r/headers'
 
@@ -6,6 +7,7 @@ module M2R
   class Request
     MONGREL2_HEADERS = %w(pattern method path query).map(&:freeze).freeze
 
+    include Base
     include Upload
 
     attr_reader :sender, :conn_id, :path, :body
