@@ -37,6 +37,11 @@ module M2R
       return Response.new(status, headers, buffer)
     end
 
+    def after_all(request, response)
+      request.body_io.close
+      request.body_io.delete if request.body_io.respond_to?(:delete)
+    end
+
     protected
 
     def https?

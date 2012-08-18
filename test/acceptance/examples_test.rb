@@ -17,5 +17,14 @@ module M2R
       user.click_on("flip!")
       assert user.find("pre").text.include?("=:-----(   (  ( ( ( { {{{{{{")
     end
+
+    def test_handler_async_uploading
+      user = TestUser.new
+      user.visit("/uploading")
+      user.attach_and_submit_first_file('uploading_form', user.generate_file)
+      user.visit("/uploading")
+      user.see!("Last submitted file was of size: 10240")
+    end
+
   end
 end

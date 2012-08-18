@@ -1,3 +1,4 @@
 mongrel2:     m2sh start -name main
 rack_handler: bundle exec rackup -I../lib -s mongrel2 lobster.ru
+uploading_handler: bundle exec rackup -I../lib -s mongrel2 uploading.ru -O recv_addr=tcp://127.0.0.1:9995 -O send_addr=tcp://127.0.0.1:9994
 http_handler: bundle exec ruby -I../lib http_0mq.rb
