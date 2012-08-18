@@ -40,6 +40,9 @@ module M2R
     def after_reply(request, response)
     end
 
+    def after_all(request, response)
+    end
+
     def listen
       loop do
         on_wait
@@ -61,6 +64,8 @@ module M2R
       @connection.reply(request, response)
 
       after_reply(request, response)
+    ensure
+      after_all(request, response)
     end
 
     protected

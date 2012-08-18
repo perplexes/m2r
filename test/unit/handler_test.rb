@@ -7,7 +7,7 @@ module M2R
       connection.stubs(:connection).returns(connection)
       h = TestHandler.new(connection)
       h.listen
-      assert_equal [:wait, :request, :disconnect], h.called_methods
+      assert_equal [:wait, :request, :disconnect, :all], h.called_methods
     end
 
     def test_lifecycle_for_upload_start
@@ -15,7 +15,7 @@ module M2R
       connection.stubs(:connection).returns(connection)
       h = TestHandler.new(connection)
       h.listen
-      assert_equal [:wait, :request, :start], h.called_methods
+      assert_equal [:wait, :request, :start, :all], h.called_methods
     end
 
     def test_lifecycle_for_upload_done
@@ -23,7 +23,7 @@ module M2R
       connection.stubs(:connection).returns(connection)
       h = TestHandler.new(connection)
       h.listen
-      assert_equal [:wait, :request, :done, :process, :after, :reply], h.called_methods
+      assert_equal [:wait, :request, :done, :process, :after, :reply, :all], h.called_methods
     end
 
     def disconnect_request
