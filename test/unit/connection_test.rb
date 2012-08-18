@@ -5,8 +5,8 @@ module M2R
   class ConnectionTest < MiniTest::Unit::TestCase
 
     def setup
-      @request_addr  = "inproc://requests"
-      @response_addr = "inproc://responses"
+      @request_addr  = "inproc://#{SecureRandom.hex}"
+      @response_addr = "inproc://#{SecureRandom.hex}"
 
       @push = M2R.zmq_context.socket(ZMQ::PUSH)
       assert_equal 0, @push.bind(@request_addr), "Could not bind push socket in tests"
