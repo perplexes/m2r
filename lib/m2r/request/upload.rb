@@ -22,7 +22,7 @@ module M2R
       return super unless upload_done?
       @body_io ||= begin
         f = File.open(upload_path, "r+b")
-        f.set_encoding(Encoding::BINARY)
+        f.set_encoding(Encoding::BINARY) if f.respond_to?(:set_encoding)
         f
       end
     end
