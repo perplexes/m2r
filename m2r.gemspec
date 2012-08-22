@@ -25,9 +25,12 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "rack"
   gem.add_development_dependency "rake"
-  gem.add_development_dependency "minitest", "= 3.2.0"
-  gem.add_development_dependency "mocha", "~> 0.12.1"
-  gem.add_development_dependency "bbq", "= 0.0.4"
-  gem.add_development_dependency "capybara-mechanize", "= 0.3.0"
-  gem.add_development_dependency "activesupport", "~> 3.2.7"
+  gem.add_development_dependency "minitest",            "= 3.2.0"
+  gem.add_development_dependency "mocha",               "~> 0.12.1"
+  gem.add_development_dependency "bbq",                 "= 0.0.4"
+  gem.add_development_dependency "capybara-mechanize",  "= 0.3.0"
+  gem.add_development_dependency "activesupport",       "~> 3.2.7"
+  gem.add_development_dependency "yard",                "~> 0.8.2"
+  gem.add_development_dependency "yard-tomdoc",         "~> 0.5.0"
+  gem.add_development_dependency "redcarpet",           "~> 2.1.1"
 end
