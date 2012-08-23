@@ -29,17 +29,13 @@ bundle install
 Guides
 ------
 
-### User
+### Running Rack Application
 
-#### Running Rack Application
-
-##### Setup
-
-###### Gemfile
+#### Gemfile
 
 Add `m2r` to `Gemfile` and run `bundle install`
 
-###### Mongrel 2
+#### Mongrel 2
 
 [Configure `Handler`](http://mongrel2.org/static/book-finalch4.html#x6-260003.4) for your application:
 
@@ -52,7 +48,7 @@ rack_example = Handler(
 )
 ```
 
-##### Running Rack app
+#### Start
 
 ```bash
 [bundle exec] rackup -s mongrel2 application.ru
@@ -64,12 +60,12 @@ Add `-O option_name` to provide options for m2r handler:
 [bundle exec] rackup -s mongrel2 another.ru -O recv_addr=tcp://127.0.0.1:9995 -O send_addr=tcp://127.0.0.1:9994
 ```
 
-##### Options
+#### Options
 
 * `recv_addr` - This is the `send_spec` option from `Handler` configuration in `mongrel2.conf`. Default: `tcp://127.0.0.1:9997`
 * `send_addr` - This is the `recv_sped` option from `Handler` configuration in your `mongrel2.conf`. Default: `tcp://127.0.0.1:9996`
 
-### Developer
+### Developing custom bare Handler
 
 TBD
 
