@@ -6,12 +6,6 @@ A [Mongrel2](http://mongrel2.org/) backend handler written in Ruby. Also include
 
 [![Build Status](https://secure.travis-ci.org/perplexes/m2r.png)](http://travis-ci.org/perplexes/m2r) [![Dependency Status](https://gemnasium.com/perplexes/m2r.png)](https://gemnasium.com/perplexes/m2r)
 
-Usage/Examples
------
-
-* [examples/http\_0mq.rb](https://github.com/perplexes/m2r/blob/master/example/http_0mq.rb) is a test little servlet thing (based on what comes with mongrel2)
-* [examples/lobster.ru](https://github.com/perplexes/m2r/blob/master/example/lobster.ru) is a rackup file using the Rack handler that'll serve Rack's funny little lobster app
-
 Installation
 ------------
 
@@ -32,10 +26,64 @@ And finally run:
 bundle install
 ```
 
+Guides
+------
+
+### User
+
+#### Running Rack Application
+
+##### Setup
+
+###### Gemfile
+
+Add `m2r` to `Gemfile` and run `bundle install`
+
+###### Mongrel 2
+
+[Configure `Handler`](http://mongrel2.org/static/book-finalch4.html#x6-260003.4) for your application:
+
+```
+rack_example = Handler(
+  send_spec  = "tcp://127.0.0.1:9997",
+  send_ident = "14fff75f-3474-4089-af6d-bbd67735ab89",
+  recv_spec  = "tcp://127.0.0.1:9996",
+  recv_ident = ""
+)
+```
+
+##### Running Rack app
+
+```bash
+[bundle exec] rackup -s mongrel2 application.ru
+```
+
+Add `-O option_name` to provide options for m2r handler:
+
+```ruby
+[bundle exec] rackup -s mongrel2 another.ru -O recv_addr=tcp://127.0.0.1:9995 -O send_addr=tcp://127.0.0.1:9994
+```
+
+##### Options
+
+* `recv_addr` - This is the `send_spec` option from `Handler` configuration in `mongrel2.conf`. Default: `tcp://127.0.0.1:9997`
+* `send_addr` - This is the `recv_sped` option from `Handler` configuration in your `mongrel2.conf`. Default: `tcp://127.0.0.1:9996`
+
+### Developer
+
+TBD
+
 Versioning
 ----------
 
 Starting from version `0.1.0` this gem follows [semantic versioning](http://semver.org) policy.
+
+Usage/Examples
+-----
+
+* [examples/http\_0mq.rb](https://github.com/perplexes/m2r/blob/master/example/http_0mq.rb) is a test little servlet thing (based on what comes with mongrel2)
+* [examples/lobster.ru](https://github.com/perplexes/m2r/blob/master/example/lobster.ru) is a rackup file using the Rack handler that'll serve Rack's funny little lobster app
+
 
 Contributing
 ------------
