@@ -3,26 +3,33 @@ require 'multi_json'
 require 'tnetstring'
 require 'thread'
 
-# Public: Allows you to easily interact with Mongrel2 webserver from
+# Allows you to easily interact with Mongrel2 webserver from
 # your ruby code.
+# @api public
 module M2R
   class << self
-    # Public: Sets ZMQ context used by M2R to create sockets
+
+    # Sets ZMQ context used by M2R to create sockets
+    # @param [ZMQ::Context] value Context to by used by M2R
+    # @see #zmq_context
+    # @api public
     attr_writer :zmq_context
 
-    # Public: Gets (or sets if not existing) ZMQ context used by M2R
+    # Gets (or sets if not existing) ZMQ context used by M2R
     # to create sockets.
     #
-    # This method is thread-safe but it uses Thread.exclusive to achive that.
-    # However it is unlikely that it affects the performance as you probably
-    # do not create more than a dozen of sockets in your code.
+    # @note This method is thread-safe
+    #   but it uses Thread.exclusive to achive that.
+    #   However it is unlikely that it affects the performance as you probably
+    #   do not create more than a dozen of sockets in your code.
     #
-    # zmq_io_threads - Size of the ØMQ thread pool to handle I/O operations.
-    #                  The rule of thumb is to make it equal to the number
-    #                  gigabits per second that the application will produce.
-    #                  Integer. (default: 1).
+    # @param [Fixnum] zmq_io_threads Size of the ZMQ thread pool to handle I/O operations.
+    #   The rule of thumb is to make it equal to the number gigabits per second
+    #   that the application will produce.
     #
-    # Returns ZMQ::Context
+    # @return [ZMQ::Context]
+    # @see #zmq_context=
+    # @api public
     def zmq_context(zmq_io_threads = 1)
       Thread.exclusive do
         @zmq_context ||= ZMQ::Context.new(zmq_io_threads)
@@ -31,7 +38,8 @@ module M2R
   end
 end
 
-# Deprecated: Namespace used in the past in 0.0.* gem releases
+# @deprecated: Use M2R instead
+#   Namespace used in the past in 0.0.* gem releases
 Mongrel2 = M2R
 
 require 'm2r/request'

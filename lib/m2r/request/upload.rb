@@ -1,23 +1,39 @@
 module M2R
+  # Logic for Mongrel2 request delivered using async-upload feature
+  # Contains methods for recognizing such requests and reading them.
+  # @private
   module Upload
-    MONGREL2_HEADERS = %w(x-mongrel2-upload-start x-mongrel2-upload-done).map(&:freeze).freeze
+    # Headers related to async-upload feature
+    # @private
+    MONGREL2_UPLOAD_HEADERS = %w(x-mongrel2-upload-start x-mongrel2-upload-done).map(&:freeze).freeze
 
+    # @return [true,false] True if this is async-upload related request
+    # @api public
     def upload?
       !!@mongrel_headers['x-mongrel2-upload-start']
     end
 
+    # @return [true,false] True if this is async-upload start notification
+    # @api public
     def upload_start?
       upload? and not upload_path
     end
 
+    # @return [true,false] True if this is final async-upload request
+    # @api public
     def upload_done?
       upload? and upload_path
     end
 
+    # @return [String] Relative path to file containing body of HTTP
+    #   request.
+    # @api public
     def upload_path
       @mongrel_headers['x-mongrel2-upload-done']
     end
 
+    # @return [File] Request body encapsulated in IO compatible object
+    # @api public
     def body_io
       return super unless upload_done?
       @body_io ||= begin
@@ -30,7 +46,7 @@ module M2R
     protected
 
     def mongrel_headers
-      (super if defined?(super)).to_a + MONGREL2_HEADERS
+      super + MONGREL2_UPLOAD_HEADERS
     end
   end
 end

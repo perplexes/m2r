@@ -56,10 +56,6 @@ module M2R
 
     protected
 
-    def mongrel_headers
-      (super if defined?(super)).to_a + MONGREL2_HEADERS
-    end
-
     def unsupported_version?
       @http_headers['version'] != 'HTTP/1.1'
     end
