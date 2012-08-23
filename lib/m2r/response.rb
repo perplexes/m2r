@@ -2,9 +2,18 @@ require 'm2r'
 require 'm2r/response/content_length'
 
 module M2R
+  # Simplest possible abstraction layer over HTTP request
+  #
+  # @api public
   class Response
+
+    # @private
     VERSION      = "HTTP/1.1".freeze
+
+    # @private
     CRLF         = "\r\n".freeze
+
+    # @private
     STATUS_CODES = {
       100 => 'Continue',
       101 => 'Switching Protocols',
@@ -59,6 +68,9 @@ module M2R
 
     attr_reader :status, :headers, :body, :reason
 
+    # @param [Fixnum, #to_i] status HTTP status code
+    # @param [Hash] headers HTTP headers
+    # @param [String] body HTTP body
     def initialize(status, headers, body = nil)
       @status  = status.to_i
       @headers = headers
@@ -66,6 +78,7 @@ module M2R
       @reason  = STATUS_CODES[status.to_i]
     end
 
+    # @return [String] HTTP Response
     def to_s
       response = "#{VERSION} #{status} #{reason}#{CRLF}"
       unless headers.empty?
