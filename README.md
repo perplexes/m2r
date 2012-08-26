@@ -118,7 +118,7 @@ Ideally, a bug report should include a pull request with failing tests.
 
 Submitting a Pull Request
 -------------------------
-
+0. [Read Contributing page](https://github.com/perplexes/m2r/wiki/Contributing)
 1. [Fork the repository.][fork]
 2. [Create a topic branch.][branch]
 3. Add tests for your unimplemented feature or bug fix.
