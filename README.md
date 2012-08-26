@@ -104,6 +104,8 @@ Here are some ways *you* can contribute:
 
 [issues]: https://github.com/perplexes/m2r/issues
 
+[Read Contributing page](https://github.com/perplexes/m2r/wiki/Contributing) before sending Pull Request :)
+
 Submitting an Issue
 -------------------
 
