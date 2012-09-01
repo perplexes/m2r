@@ -1,13 +1,13 @@
 require 'm2r'
 
 module M2R
-  # [Connection] factory so that every thread can use it generate its own
-  # [Connection] for communication with Mongrel2.
+  # {Connection} factory so that every thread can use it generate its own
+  # {Connection} for communication with Mongrel2.
   #
   # @api public
   class ConnectionFactory
 
-    # @param [String, nil] sender_id ZMQ::IDENTITY for response socket
+    # @param [String, nil] sender_id {ZMQ::IDENTITY} option for response socket
     # @param [String] request_addr ZMQ connection address. This is the
     #   send_spec option from Handler configuration in mongrel2.conf
     # @param [String] response_addr ZMQ connection address. This is the
@@ -23,7 +23,7 @@ module M2R
     end
 
     # Builds new Connection which can be used to receive, parse
-    #   Mongrel2 requests and send responses.
+    # Mongrel2 requests and send responses.
     #
     # @return [Connection]
     def connection

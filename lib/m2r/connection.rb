@@ -17,9 +17,9 @@ module M2R
       @request_parser  = request_parser
     end
 
-    # For compatibility with [ConnectionFactory]
+    # For compatibility with {M2R::ConnectionFactory}
     #
-    # @return self
+    # @return [Connection] self
     # @api public
     def connection
       self
@@ -28,6 +28,7 @@ module M2R
     # Returns parsed Mongrel2 request
     #
     # @note This is blocking call
+    # @return [Request] Request parsed by {#request_parser}
     # @api public
     def receive
       @request_socket.recv_string(msg = "")
@@ -55,5 +56,11 @@ module M2R
       msg = "#{uuid} #{TNetstring.dump([*connection_ids].join(' '))} #{data}"
       @response_socket.send_string(msg)
     end
+
+    private
+
+    attr_reader :request_socket
+    attr_reader :response_socket
+    attr_reader :request_parser
   end
 end

@@ -15,27 +15,34 @@ module M2R
     end
 
     # Get header
-    # @param [String] header HTTP Header key
+    # @param [String, Symbol, #to_s] header HTTP Header key
+    # @return [String, nil] Value of given Header, nil when not present
     def [](header)
       @headers[transform_key(header)]
     end
 
     # Set header
-    # @param [String] header HTTP Header key
+    # @param [String, Symbol, #to_s] header HTTP Header key
     # @param [String] value HTTP Header value
+    # @return [String] Set value
     def []=(header, value)
       @headers[transform_key(header)] = value
     end
 
     # Delete header
-    # @param [String] header HTTP Header key
+    # @param [String, Symbol, #to_s] header HTTP Header key
+    # @return [String, nil] Value of deleted header, nil when was not present
     def delete(header)
       @headers.delete(transform_key(header))
     end
 
     # Iterate over headers
-    def each
-      @headers.each { |k, v| yield [k, v] }
+    # @yield HTTP header and its value
+    # @yieldparam [String] header HTTP Header name (downcased)
+    # @yieldparam [String] value HTTP Header value
+    # @return [Hash, Enumerator]
+    def each(&proc)
+      @headers.each(&proc)
     end
 
     # Fill Hash with Headers compatibile with Rack standard.
@@ -45,7 +52,7 @@ module M2R
     # (according to the spec)
     #
     # @param [Hash] env Hash representing Rack Env or compatible
-    # @return [Hash] same Hash as provided as param.
+    # @return [Hash] same Hash as provided as argument.
     def rackify(env = {})
       @headers.each do |header, value|
         key = "HTTP_" + header.upcase.gsub("-", "_")

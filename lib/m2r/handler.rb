@@ -6,16 +6,17 @@ module M2R
   # Overwrite hook methods to define behavior.
   # After calling #listen the Handler will block
   # waiting for request from connection generated
-  # by connection_factory, process them and send
+  # by {M2R::Handler#connection_factory}, process them and send
   # reponses back.
   #
   # @api public
+  # @abstract Subclass and override method hooks to implement your own Handler
   class Handler
-    # Connection used for receiving requests and
-    # sending responses
+    # @return [Connection] used for receiving requests and sending responses
     attr_accessor :connection
 
-    # @param [ConnectionFactory, Connection, #connection] Factory for generating connections
+    # @param [ConnectionFactory, Connection, #connection] connection_factory
+    #   Factory for generating connections
     def initialize(connection_factory)
       @connection = connection_factory.connection
     end
@@ -35,43 +36,63 @@ module M2R
     protected
 
     # Callback executed when waiting for a request
+    # @api public
+    # @!visibility public
     def on_wait()
     end
 
     # Callback when a request is received
+    # @api public
+    # @!visibility public
     def on_request(request)
     end
 
     # Override to return a response
+    # @api public
+    # @!visibility public
+    # @return [Response, String, #to_s] Response that should be sent to
+    #   Mongrel2 instance
     def process(request)
       raise NotImplementedError
     end
 
     # Callback executed when response could not be delivered by Mongrel2
     # because client already disconnected.
+    # @api public
+    # @!visibility public
     def on_disconnect(request)
     end
 
     # Callback when async-upload started
+    # @api public
+    # @!visibility public
     def on_upload_start(request)
     end
 
     # Callback when async-upload finished
+    # @api public
+    # @!visibility public
     def on_upload_done(request)
     end
 
     # Callback after process_request is done
+    # @api public
+    # @!visibility public
     def after_process(request, response)
       return response
     end
 
     # Callback after sending the response back
+    # @api public
+    # @!visibility public
     def after_reply(request, response)
     end
 
     # Callback after request is processed that is executed
     # even when execption occured. Useful for releasing
     # resources (closing files etc)
+    # @api public
+    # @!visibility public
     def after_all(request, response)
     end
 

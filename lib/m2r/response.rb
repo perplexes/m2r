@@ -66,11 +66,21 @@ module M2R
     }
     STATUS_CODES.freeze
 
-    attr_reader :status, :headers, :body, :reason
+    # @return [Fixnum] HTTP Status code
+    attr_reader :status
+
+    # @return [Hash, Headers] Collection of response HTTP Headers
+    attr_reader :headers
+
+    # @return [String] HTTP Body
+    attr_reader :body
+
+    # @return [String] HTTP Status code description
+    attr_reader :reason
 
     # @param [Fixnum, #to_i] status HTTP status code
     # @param [Hash] headers HTTP headers
-    # @param [String] body HTTP body
+    # @param [String, nil] body HTTP body
     def initialize(status, headers, body = nil)
       @status  = status.to_i
       @headers = headers

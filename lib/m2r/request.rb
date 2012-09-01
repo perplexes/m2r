@@ -4,7 +4,7 @@ require 'm2r/request/upload'
 require 'm2r/headers'
 
 module M2R
-  # Abstraction over Mongrel 2 request. Allows
+  # Abstraction over Mongrel 2 request
   # @api public
   class Request
     MONGREL2_HEADERS = %w(pattern method path query).map(&:freeze).freeze
@@ -27,7 +27,7 @@ module M2R
     # @param [String] sender UUID of mongrel2 origin instance
     # @param [String] conn_id Mongrel2 connection id sending this request
     # @param [String] path HTTP Path of request
-    # @param [M2R::Headers] HTTP headers of request
+    # @param [M2R::Headers] headers HTTP headers of request
     # @param [String] body HTTP Body of request
     def initialize(sender, conn_id, path, headers, body)
       @http_headers, @mongrel_headers = split_headers(headers)
@@ -76,7 +76,7 @@ module M2R
 
     # @return [true, false] Internal mongrel2 message to handler issued when
     #   message delivery is not possible because the client already
-    #   disconnected and there is no connection with such conn_id
+    #   disconnected and there is no connection with such {#conn_id}
     def disconnect?
       json? and @data['type'] == 'disconnect'
     end
