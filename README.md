@@ -1,8 +1,7 @@
 m2r
 ===
 
-A [Mongrel2](http://mongrel2.org/) backend handler written in Ruby. Also includes Rack adpater to get you up and running quickly.
-
+A [Mongrel2](http://mongrel2.org/) [™](#legal) backend handler written in Ruby. Also includes Rack adpater to get you up and running quickly.
 
 [![Build Status](https://secure.travis-ci.org/perplexes/m2r.png)](http://travis-ci.org/perplexes/m2r) [![Dependency Status](https://gemnasium.com/perplexes/m2r.png)](https://gemnasium.com/perplexes/m2r)
 
@@ -145,3 +144,8 @@ This library aims to support and is [tested against](http://travis-ci.org/perple
 - JRuby
 - Rubinius
 
+
+legal
+-----------------------
+
+Mongrel2 is a registered trademark of [Zed A. Shaw](http://zedshaw.com/) who wrote it. And it is awesome.
