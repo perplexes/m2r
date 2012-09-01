@@ -2,6 +2,8 @@ require 'm2r'
 require 'rack'
 
 module M2R
+  # Handle Mongrel2 requests using Rack application
+  # @private
   class RackHandler < Handler
     attr_accessor :app
 

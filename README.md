@@ -63,7 +63,7 @@ Add `-O option_name` to provide options for m2r handler:
 #### Options
 
 * `recv_addr` - This is the `send_spec` option from `Handler` configuration in `mongrel2.conf`. Default: `tcp://127.0.0.1:9997`
-* `send_addr` - This is the `recv_sped` option from `Handler` configuration in your `mongrel2.conf`. Default: `tcp://127.0.0.1:9996`
+* `send_addr` - This is the `recv_spec` option from `Handler` configuration in your `mongrel2.conf`. Default: `tcp://127.0.0.1:9996`
 
 ### Developing custom bare Handler
 
