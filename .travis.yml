@@ -9,9 +9,8 @@ rvm:
 
 matrix:
   allow_failures:
-    - rvm:
-      - ruby-head
-      - jruby-head
+    - rvm: ruby-head
+    - rvm: jruby-head
 
 notifications:
   irc: "irc.freenode.org#mongrel2-ruby"
