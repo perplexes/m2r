@@ -64,6 +64,16 @@ Add `-O option_name` to provide options for m2r handler:
 * `recv_addr` - This is the `send_spec` option from `Handler` configuration in `mongrel2.conf`. Default: `tcp://127.0.0.1:9997`
 * `send_addr` - This is the `recv_spec` option from `Handler` configuration in your `mongrel2.conf`. Default: `tcp://127.0.0.1:9996`
 
+#### Processing HTTPS requests from Mongrel2 1.7
+
+Set `HTTPS` env to `true`.
+
+```bash
+HTTPS=true [bundle exec] rackup -s mongrel2 application.ru
+```
+
+For Mongrel2 1.8 and newer this is not necessary.
+
 ### Developing custom bare Handler
 
 TBD
