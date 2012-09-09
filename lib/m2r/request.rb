@@ -7,7 +7,8 @@ module M2R
   # Abstraction over Mongrel 2 request
   # @api public
   class Request
-    MONGREL2_HEADERS = %w(pattern method path query).map(&:freeze).freeze
+    # @api private
+    TRUE_STRINGS     = %w(true yes on 1).map(&:freeze).freeze
 
     include Base
     include Upload
@@ -74,6 +75,11 @@ module M2R
       @mongrel_headers['query']
     end
 
+    # return [String] URL scheme
+    def scheme
+      @mongrel_headers['url_scheme'] || mongrel17_scheme
+    end
+
     # @return [true, false] Internal mongrel2 message to handler issued when
     #   message delivery is not possible because the client already
     #   disconnected and there is no connection with such {#conn_id}
@@ -89,6 +95,15 @@ module M2R
     end
 
     protected
+
+    def mongrel17_scheme
+      return 'https' if TRUE_STRINGS.include? env_https
+      return 'http'
+    end
+
+    def env_https
+      (ENV['HTTPS'] || "").downcase
+    end
 
     def unsupported_version?
       @http_headers['version'] != 'HTTP/1.1'

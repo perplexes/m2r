@@ -4,7 +4,7 @@ module M2R
   #
   # @private
   module Base
-    MONGREL2_BASE_HEADERS = %w(pattern method path query).map(&:freeze).freeze
+    MONGREL2_BASE_HEADERS = %w(pattern method path query url_scheme).map(&:freeze).freeze
 
     # @return [StringIO] Request body encapsulated in IO compatible object
     # @api public

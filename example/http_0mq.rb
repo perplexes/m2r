@@ -26,6 +26,10 @@ SENDER:  #{request.sender}
 IDENT:   #{request.conn_id}
 PATH:    #{request.path}
 HEADERS: #{MultiJson.dump(request.headers.inject({}) {|hash,(h,v)| hash[h]=v; hash }, :pretty => true)}
+PATTERN: #{request.pattern}
+METHOD:  #{request.method}
+QUERY:   #{request.query}
+SCHEME:  #{request.scheme}
 BODY:    #{request.body.inspect}
 </pre>
 EOF

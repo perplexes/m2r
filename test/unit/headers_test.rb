@@ -9,6 +9,11 @@ module M2R
       assert_equal "CT", headers['Content-type']
     end
 
+    def test_underscore
+      headers = Headers.new({"URL_SCHEME" => "https"})
+      assert_equal "https", headers['url_scheme']
+    end
+
     def test_symbols_as_keys
       headers = Headers.new({"type" => "Ty"})
       assert_equal "Ty", headers[:type]

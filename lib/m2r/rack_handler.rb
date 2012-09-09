@@ -27,7 +27,7 @@ module M2R
         'rack.multithread'  => false,
         'rack.multiprocess' => true,
         'rack.run_once'     => false,
-        'rack.url_scheme'   => https? ? 'https' : 'http',
+        'rack.url_scheme'   => request.scheme,
         'rack.input'        => request.body_io
       }
       env['SERVER_NAME'], env['SERVER_PORT'] = request.headers['Host'].split(':', 2)
@@ -44,10 +44,5 @@ module M2R
       request.body_io.delete if request.body_io.respond_to?(:delete)
     end
 
-    protected
-
-    def https?
-      %w(yes on 1).include? ENV['HTTPS']
-    end
   end
 end
