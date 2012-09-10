@@ -5,6 +5,7 @@ module MongrelHelper
 
   def setup
     check_mongrel
+    `cd example && m2sh load -config mongrel2.conf`
     self.pid = Process.spawn("bundle exec foreman start --procfile=example/Procfile", pgroup: true)
     wait_for_pid('example/tmp/mongrel2.pid')
   end
