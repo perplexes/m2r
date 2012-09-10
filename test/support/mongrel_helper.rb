@@ -5,7 +5,7 @@ module MongrelHelper
 
   def setup
     check_mongrel
-    self.pid = Process.spawn("bundle exec foreman start --procfile=example/Procfile", pgroup: true, out: "/dev/null", err: "/dev/null")
+    self.pid = Process.spawn("bundle exec foreman start --procfile=example/Procfile", pgroup: true)
     wait_for_pid('example/tmp/mongrel2.pid')
   end
 
