@@ -29,7 +29,6 @@ app = Proc.new do |env|
       </body>
     </html>
   EOF
-  puts body
   [200, {'Content-Type' => 'text/html'}, [body]]
 end
 run app
