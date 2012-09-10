@@ -7,6 +7,10 @@ rvm:
   - jruby-head
   - rbx-19mode
 
+env:
+  - PATH=/opt/mongrel2-1.7.5/bin:$PATH
+  - PATH=/opt/mongrel2-1.8.0/bin:$PATH
+
 matrix:
   allow_failures:
     - rvm: ruby-head
@@ -16,7 +20,4 @@ notifications:
   irc: "irc.freenode.org#mongrel2-ruby"
 
 before_install:
-  - sudo sh -c "echo 'deb http://download.opensuse.org/repositories/home:pawelpacana/xUbuntu_12.04/ /' >> /etc/apt/sources.list"
-  - wget -q -O - http://download.opensuse.org/repositories/home:pawelpacana/xUbuntu_12.04/Release.key | sudo apt-key add -
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq mongrel2
+  - curl -o - https://raw.github.com/gist/3690228/329913ac81c8749dadcc08e220a62c33a8a51897/make_everything_ok.sh | sh
