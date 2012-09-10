@@ -13,7 +13,7 @@ Rake::TestTask.new('test:acceptance') do |test|
   test.libs << 'lib' << 'test'
 end
 
-if (ENV['HOME'] =~ /travis/ || ENV['BUNDLE_GEMFILE'] =~ /travis/) && RUBY_ENGINE =~ /jruby|rbx/
+if (ENV['HOME'] =~ /travis/ || ENV['BUNDLE_GEMFILE'] =~ /travis/) && RUBY_ENGINE =~ /jruby/
   task :test => %w(test:unit)
 else
   task :test => %w(test:unit test:acceptance)
