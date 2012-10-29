@@ -16,6 +16,10 @@ module M2R
       end
     end
 
+    def free!
+      body_io.close
+    end
+
     protected
 
     def mongrel_headers

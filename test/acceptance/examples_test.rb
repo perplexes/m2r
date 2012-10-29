@@ -19,11 +19,13 @@ module M2R
     end
 
     def test_handler_async_uploading
+      Dir.glob('example/tmp/upload*') {|p| File.delete(p) }
       user = TestUser.new
       user.visit("/uploading")
       user.attach_and_submit_first_file('uploading_form', user.generate_file)
       user.visit("/uploading")
       user.see!("Last submitted file was of size: 10240")
+      assert_equal 0, Dir.glob('example/tmp/upload*').size
     end
 
   end

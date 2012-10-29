@@ -40,8 +40,7 @@ module M2R
     end
 
     def after_all(request, response)
-      request.body_io.close
-      request.body_io.delete if request.body_io.respond_to?(:delete)
+      request.free!
     end
 
   end

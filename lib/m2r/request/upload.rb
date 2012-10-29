@@ -43,6 +43,11 @@ module M2R
       end
     end
 
+    def free!
+      super
+      File.delete(body_io.path) if upload_done?
+    end
+
     protected
 
     def mongrel_headers
