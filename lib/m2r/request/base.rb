@@ -16,6 +16,8 @@ module M2R
       end
     end
 
+    # @return [nil] Free external resources such as files or sockets
+    # @api public
     def free!
       body_io.close
     end

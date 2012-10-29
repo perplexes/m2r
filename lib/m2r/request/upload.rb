@@ -43,6 +43,8 @@ module M2R
       end
     end
 
+    # @return [nil] Free external resources such as files or sockets
+    # @api public
     def free!
       super
       File.delete(body_io.path) if upload_done?
