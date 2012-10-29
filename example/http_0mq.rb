@@ -8,6 +8,9 @@
 #
 # Browse now to http://localhost:6767/handler to see the effect.
 
+$stdout.sync = true
+$stderr.sync = true
+
 require 'm2r'
 
 class Http0MQHandler < M2R::Handler

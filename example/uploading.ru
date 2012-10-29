@@ -7,6 +7,9 @@
 #
 # This example is not threadsafe !
 
+$stdout.sync = true
+$stderr.sync = true
+
 require 'rack'
 require 'pathname'
 

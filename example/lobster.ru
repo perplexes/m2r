@@ -7,6 +7,9 @@
 #
 # Browse now to http://localhost:6767/rack to see the effect.
 
+$stdout.sync = true
+$stderr.sync = true
+
 require 'rack/lobster'
 use Rack::ContentLength
 run Rack::Lobster.new
