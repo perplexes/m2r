@@ -46,6 +46,7 @@ sender_id = "34f9ceee-cd52-4b7f-b197-88bf2f0ec378"
 pull_port = "tcp://127.0.0.1:9999"
 pub_port  = "tcp://127.0.0.1:9998"
 
-handler   = Http0MQHandler.new(M2R::ConnectionFactory.new(sender_id, pull_port, pub_port), M2R::Request)
+factory   = M2R::ConnectionFactory.new M2R::ConnectionFactory::Options.new(sender_id, pull_port, pub_port)
+handler   = Http0MQHandler.new(factory, M2R::Request)
 handler.listen
 

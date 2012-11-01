@@ -34,7 +34,7 @@ module M2R
         'sender_id' => id   = SecureRandom.uuid
       }
       cf = mock(:connection)
-      ConnectionFactory.expects(:new).with(id, recv, send).returns(cf)
+      ConnectionFactory.expects(:new).with(responds_with(:sender_id, id)).returns(cf)
       RackHandler.any_instance.stubs(:stop? => true)
       handler.run(HelloWorld.new, options)
     end

@@ -109,7 +109,7 @@ module M2R
     def one_loop
       on_wait
       throw :stop if stop?
-      request_lifecycle(@parser.parse @connection.receive)
+      request_lifecycle(next_request)
     end
 
 

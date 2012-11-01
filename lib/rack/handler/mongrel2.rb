@@ -28,17 +28,17 @@ module Rack
       end
 
       def self.connection_factory(options)
-        if custom = options.connection_factory
-          klass = begin
+        klass = if custom = options.connection_factory
+          begin
             M2R::ConnectionFactory.const_get(custom.classify)
           rescue NameError
             require "m2r/connection_factory/#{custom.underscore}"
             M2R::ConnectionFactory.const_get(custom.classify)
           end
-          klass.new(options)
         else
-          M2R::ConnectionFactory.new(options.sender_id, options.recv_addr, options.send_addr)
+          M2R::ConnectionFactory
         end
+        klass.new(options)
       end
     end
 
