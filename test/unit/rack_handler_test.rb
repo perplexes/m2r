@@ -33,7 +33,7 @@ module M2R
 
     def test_lint_rack_adapter
       factory    = stub(:connection)
-      handler    = RackHandler.new(app, factory)
+      handler    = RackHandler.new(app, factory, Request)
       response   = handler.process(root_request)
 
       assert_equal "Hello world!", response.body

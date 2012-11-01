@@ -8,13 +8,10 @@ module M2R
     #   from Mongrel2
     # @param [ZMQ::Socket] response_socket socket for sending responses
     #   to Mongrel2
-    # @param [#parse] request_parser Object responsible for parsing Mongrel2
-    #   requests
     # @api public
-    def initialize(request_socket, response_socket, request_parser = Request)
+    def initialize(request_socket, response_socket)
       @request_socket  = request_socket
       @response_socket = response_socket
-      @request_parser  = request_parser
     end
 
     # For compatibility with {M2R::ConnectionFactory}
@@ -25,14 +22,14 @@ module M2R
       self
     end
 
-    # Returns parsed Mongrel2 request
+    # Returns Mongrel2 request
     #
     # @note This is blocking call
-    # @return [Request] Request parsed by {#request_parser}
+    # @return [String] M2 request message
     # @api public
     def receive
       @request_socket.recv_string(msg = "")
-      @request_parser.parse(msg)
+      return msg
     end
 
     # Sends response to Mongrel2 for given request
@@ -61,6 +58,5 @@ module M2R
 
     attr_reader :request_socket
     attr_reader :response_socket
-    attr_reader :request_parser
   end
 end

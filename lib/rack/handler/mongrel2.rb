@@ -15,7 +15,8 @@ module Rack
       def self.run(app, options = {})
         options = OpenStruct.new( DEFAULT_OPTIONS.merge(options) )
         factory = M2R::ConnectionFactory.new(options.sender_id, options.recv_addr, options.send_addr)
-        adapter = M2R::RackHandler.new(app, factory)
+        parser  = M2R::Request
+        adapter = M2R::RackHandler.new(app, factory, parser)
         adapter.listen
       end
 
@@ -23,7 +24,7 @@ module Rack
         {
           'recv_addr=RECV_ADDR' => 'Receive address',
           'send_addr=SEND_ADDR' => 'Send address',
-          'sender_id=UUID' => 'Sender UUID'
+          'sender_id=UUID'      => 'Sender UUID'
         }
       end
     end

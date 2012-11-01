@@ -2,7 +2,7 @@ require 'm2r/handler'
 
 class TestHandler < M2R::Handler
   attr_reader :called_methods
-  def initialize(connection)
+  def initialize(connection, parser)
     super
     @called_methods = []
   end

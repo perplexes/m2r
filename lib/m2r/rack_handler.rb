@@ -7,9 +7,9 @@ module M2R
   class RackHandler < Handler
     attr_accessor :app
 
-    def initialize(app, connection_factory)
+    def initialize(app, connection_factory, parser)
       @app = app
-      super(connection_factory)
+      super(connection_factory, parser)
 
       trap('INT') { stop }
     end

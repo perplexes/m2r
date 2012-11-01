@@ -32,17 +32,8 @@ module M2R
 
     def test_receive_message
       connection = Connection.new(@request_socket, @response_socket)
-      @push.send_string("1c5fd481-1121-49d8-a706-69127975db1a ebb407b2-49aa-48a5-9f96-9db121051484 / 2:{},0:,", ZMQ::NOBLOCK)
-      assert_instance_of Request, connection.receive
-    end
-
-    def test_different_parser
-      msg = "1c5fd481-1121-49d8-a706-69127975db1a ebb407b2-49aa-48a5-9f96-9db121051484 / 2:{},0:,"
-      parser = stub(:parser)
-      parser.expects(:parse).with(msg).returns(request = Object.new)
-      connection = Connection.new(@request_socket, @response_socket, parser)
       @push.send_string(msg = "1c5fd481-1121-49d8-a706-69127975db1a ebb407b2-49aa-48a5-9f96-9db121051484 / 2:{},0:,", ZMQ::NOBLOCK)
-      assert_equal request, connection.receive
+      assert_equal msg, connection.receive
     end
 
   end

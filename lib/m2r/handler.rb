@@ -17,8 +17,12 @@ module M2R
 
     # @param [ConnectionFactory, Connection, #connection] connection_factory
     #   Factory for generating connections
-    def initialize(connection_factory)
+    #
+    # @param [#parse] parser
+    #   Parser of M2 requests
+    def initialize(connection_factory, parser)
       @connection = connection_factory.connection
+      @parser     = parser
     end
 
     # Start processing request
@@ -98,10 +102,14 @@ module M2R
 
     private
 
+    def next_request
+      @parser.parse @connection.receive
+    end
+
     def one_loop
       on_wait
       throw :stop if stop?
-      request_lifecycle(@connection.receive)
+      request_lifecycle(@parser.parse @connection.receive)
     end
 
 

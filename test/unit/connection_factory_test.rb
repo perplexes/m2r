@@ -7,7 +7,6 @@ module M2R
       sender_id = "sid"
       request_addr = "req"
       response_addr = "req"
-      request_parser = Object.new
 
       pull    = stub(:pull)
       pub     = stub(:pub)
@@ -21,8 +20,8 @@ module M2R
       pub.expects(:connect).with(response_addr)
       pub.expects(:setsockopt).with(ZMQ::IDENTITY, sender_id)
 
-      Connection.expects(:new).with(pull, pub, request_parser)
-      cf = ConnectionFactory.new sender_id, request_addr, response_addr, request_parser, context
+      Connection.expects(:new).with(pull, pub)
+      cf = ConnectionFactory.new sender_id, request_addr, response_addr, context
       cf.connection
     end
   end
