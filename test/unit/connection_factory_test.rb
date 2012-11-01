@@ -21,30 +21,9 @@ module M2R
       pub.expects(:setsockopt).with(ZMQ::IDENTITY, sender_id)
 
       Connection.expects(:new).with(pull, pub)
-      cf = ConnectionFactory.new Struct.new(:sender_id, :recv_addr, :send_addr).new(sender_id, request_addr, response_addr), context
+      cf = ConnectionFactory.new ConnectionFactory::Options.new(sender_id, request_addr, response_addr), context
       cf.connection
     end
 
-    def test_factory_hash
-      sender_id = "sid"
-      request_addr = "req"
-      response_addr = "req"
-
-      pull    = stub(:pull)
-      pub     = stub(:pub)
-      context = stub(:context)
-
-      context.expects(:socket).with(ZMQ::PULL).returns(pull)
-      context.expects(:socket).with(ZMQ::PUB).returns(pub)
-
-      pull.expects(:connect).with(request_addr)
-
-      pub.expects(:connect).with(response_addr)
-      pub.expects(:setsockopt).with(ZMQ::IDENTITY, sender_id)
-
-      Connection.expects(:new).with(pull, pub)
-      cf = ConnectionFactory.new({'sender_id' => sender_id, 'recv_addr' => request_addr, 'send_addr' => response_addr}, context)
-      cf.connection
-    end
   end
 end
