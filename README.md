@@ -55,7 +55,7 @@ rack_example = Handler(
 
 Add `-O option_name` to provide options for m2r handler:
 
-```ruby
+```bash
 [bundle exec] rackup -s mongrel2 another.ru -O recv_addr=tcp://127.0.0.1:9995 -O send_addr=tcp://127.0.0.1:9994
 ```
 
@@ -63,6 +63,63 @@ Add `-O option_name` to provide options for m2r handler:
 
 * `recv_addr` - This is the `send_spec` option from `Handler` configuration in `mongrel2.conf`. Default: `tcp://127.0.0.1:9997`
 * `send_addr` - This is the `recv_spec` option from `Handler` configuration in your `mongrel2.conf`. Default: `tcp://127.0.0.1:9996`
+* `factory`   - Use it to load custom `ConnectionFactory` that implements rules for ZMQ connections to Mongrel 2.
+
+#### Custom Connection Factory
+
+ZMQ allows to set multiple options and connect to large number of endpoints. Providing every ZMQ option for handler connections
+would be troublesome. Instead you can use your custom implementation that deals only with that fact.
+
+##### Automatic require of custom connection factory
+
+The first way to do it is to implement custom class in a file that can be required with 'm2r/connection_factory/custom_name'.
+The location of such file might depends on how `$LOAD_PATH` is configured but for standard Rails application or gem that
+would like to depend on `m2r` it would be: `lib/m2r/connection_factory/custom_name`.
+
+Implement the Factory in the file:
+
+```ruby
+module M2R
+  class ConnectionFactory
+    # Just exemplary implementation ...
+    class CustomName < ConnectionFactory
+      def initialize(options)
+        # OpenStruct with rackup options for the handler (added with -O)
+        @options = options
+      end
+
+      def connection
+        request_socket = @context.socket(ZMQ::PULL)
+        request_socket.connect("tcp://127.0.0.1:2222")
+        request_socket.setsockopt(ZMQ::RECONNECT_IVL, 5)
+
+        response_socket = @context.socket(ZMQ::PUB)
+        response_socket.connect("tcp://127.0.0.1:3333")
+        response_socket.setsockopt(ZMQ::HWM, 100)
+        response_socket.setsockopt(ZMQ::RECONNECT_IVL, 5)
+
+        Connection.new(request_socket, response_socket)
+      end
+    end
+  end
+end
+```
+
+Use `connection_factory` option to select it.
+
+```bash
+[bundle exec] rackup -s mongrel2 another.ru -O connection_factory=custom_name
+```
+
+##### Manual require of factory
+
+Implement custom factory in a file like in a previous paragraph.
+
+Load the file using `-r` option for `rackup` and use `connection_factory` option.
+
+```bash
+[bundle exec] rackup -r custom_name.rb -s mongrel2 another.ru -O connection_factory=custom_name
+```
 
 #### Processing HTTPS requests from Mongrel2 1.7
 

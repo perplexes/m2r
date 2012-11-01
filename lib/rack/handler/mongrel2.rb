@@ -14,9 +14,8 @@ module Rack
 
       def self.run(app, options = {})
         options = OpenStruct.new( DEFAULT_OPTIONS.merge(options) )
-        factory = M2R::ConnectionFactory.new(options.sender_id, options.recv_addr, options.send_addr)
         parser  = M2R::Request
-        adapter = M2R::RackHandler.new(app, factory, parser)
+        adapter = M2R::RackHandler.new(app, connection_factory(options), parser)
         adapter.listen
       end
 
@@ -26,6 +25,20 @@ module Rack
           'send_addr=SEND_ADDR' => 'Send address',
           'sender_id=UUID'      => 'Sender UUID'
         }
+      end
+
+      def self.connection_factory(options)
+        if custom = options.connection_factory
+          klass = begin
+            M2R::ConnectionFactory.const_get(custom.classify)
+          rescue NameError
+            require "m2r/connection_factory/#{custom.underscore}"
+            M2R::ConnectionFactory.const_get(custom.classify)
+          end
+          klass.new(options)
+        else
+          M2R::ConnectionFactory.new(options.sender_id, options.recv_addr, options.send_addr)
+        end
       end
     end
 
