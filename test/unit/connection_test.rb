@@ -36,5 +36,23 @@ module M2R
       assert_equal msg, connection.receive
     end
 
+    def test_exception_when_receiving
+      request_socket = mock(:recv_string => -1)
+      connection = Connection.new request_socket, nil
+      assert_raises(Connection::Error) { connection.receive }
+    end
+
+    def test_exception_when_deliverying
+      response_socket = mock(:send_string => -1)
+      connection = Connection.new nil, response_socket
+      assert_raises(Connection::Error) { connection.deliver('uuid', ['connection_ids'], 'data') }
+    end
+
+    def test_exception_when_replying
+      response_socket = mock(:send_string => -1)
+      connection = Connection.new nil, response_socket
+      assert_raises(Connection::Error) { connection.reply( Struct.new(:sender, :conn_id).new('sender', 'conn_id') , 'data' ) }
+    end
+
   end
 end

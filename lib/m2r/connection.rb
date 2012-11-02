@@ -3,6 +3,7 @@ require 'm2r'
 module M2R
   # Connection for exchanging data with mongrel2
   class Connection
+    class Error < StandardError; end
 
     # @param [ZMQ::Socket] request_socket socket for receiving requests
     #   from Mongrel2
@@ -28,7 +29,8 @@ module M2R
     # @return [String] M2 request message
     # @api public
     def receive
-      @request_socket.recv_string(msg = "")
+      ret = @request_socket.recv_string(msg = "")
+      raise Error, "Unable to receive message: #{ZMQ::Util.error_string}" if ret < 0
       return msg
     end
 
@@ -51,7 +53,8 @@ module M2R
     # @api public
     def deliver(uuid, connection_ids, data)
       msg = "#{uuid} #{TNetstring.dump([*connection_ids].join(' '))} #{data}"
-      @response_socket.send_string(msg)
+      ret = @response_socket.send_string(msg)
+      raise Error, "Unable to receive message: #{ZMQ::Util.error_string}" if ret < 0
     end
 
     private
