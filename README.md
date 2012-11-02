@@ -5,6 +5,12 @@ A [Mongrel2](http://mongrel2.org/) [™](#legal) backend handler written in Ruby
 
 [![Build Status](https://secure.travis-ci.org/perplexes/m2r.png)](http://travis-ci.org/perplexes/m2r) [![Dependency Status](https://gemnasium.com/perplexes/m2r.png)](https://gemnasium.com/perplexes/m2r)
 
+Documentation
+-------------
+
+* [Tutorial](http://documentup.com/perplexes/m2r/recompile)
+* [API](http://www.rubydoc.info/gems/m2r/frames)
+
 Installation
 ------------
 
@@ -72,7 +78,7 @@ would be troublesome. Instead you can use your custom implementation that deals 
 
 ##### Automatic require of custom connection factory
 
-The first way to do it is to implement custom class in a file that can be required with 'm2r/connection_factory/custom_name'.
+The first way to do it is to implement custom class in a file that can be required with `m2r/connection_factory/custom_name`.
 The location of such file might depends on how `$LOAD_PATH` is configured but for standard Rails application or gem that
 would like to depend on `m2r` it would be: `lib/m2r/connection_factory/custom_name`.
 
