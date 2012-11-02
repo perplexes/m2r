@@ -48,12 +48,14 @@ module M2R
     # Callback when a request is received
     # @api public
     # @!visibility public
+    # @param [Request] request Request object
     def on_request(request)
     end
 
     # Override to return a response
     # @api public
     # @!visibility public
+    # @param [Request] request Request object
     # @return [Response, String, #to_s] Response that should be sent to
     #   Mongrel2 instance
     def process(request)
@@ -64,24 +66,30 @@ module M2R
     # because client already disconnected.
     # @api public
     # @!visibility public
+    # @param [Request] request Request object
     def on_disconnect(request)
     end
 
     # Callback when async-upload started
     # @api public
     # @!visibility public
+    # @param [Request] request Request object
     def on_upload_start(request)
     end
 
     # Callback when async-upload finished
     # @api public
     # @!visibility public
+    # @param [Request] request Request object
     def on_upload_done(request)
     end
 
     # Callback after process_request is done
     # @api public
     # @!visibility public
+    # @param [Request] request Request object
+    # @param [Response, String, #to_s] response Response that should be sent to
+    #   Mongrel2 instance
     def after_process(request, response)
       return response
     end
@@ -89,6 +97,9 @@ module M2R
     # Callback after sending the response back
     # @api public
     # @!visibility public
+    # @param [Request] request Request object
+    # @param [Response, String, #to_s] response Response that was sent to
+    #   Mongrel2 instance
     def after_reply(request, response)
     end
 
@@ -97,7 +108,23 @@ module M2R
     # resources (closing files etc)
     # @api public
     # @!visibility public
+    # @note `response` might be nil depending on when exception occured.
+    # @note In case of error this callback is called before on_error
+    # @param [Request] request Request object
+    # @param [Response, String, #to_s, nil] response Response that was sent to
+    #   Mongrel2 instance
     def after_all(request, response)
+    end
+
+    # Callback when exception occured
+    # @api public
+    # @!visibility public
+    # @note `request` and/or `response` might be nil depending on when error occured
+    # @param [Request, nil] request Request object
+    # @param [Response, String, #to_s, nil] response Response that might have been sent to
+    #   Mongrel2 instance
+    # @param [StandardError] error
+    def on_error(request, response, error)
     end
 
     private
@@ -109,9 +136,10 @@ module M2R
     def one_loop
       on_wait
       throw :stop if stop?
-      request_lifecycle(next_request)
+      response = request_lifecycle(request = next_request)
+    rescue => error
+      on_error(request, response, error)
     end
-
 
     def request_lifecycle(request)
       on_request(request)
@@ -126,6 +154,7 @@ module M2R
       @connection.reply(request, response)
 
       after_reply(request, response)
+      return response
     ensure
       after_all(request, response)
     end

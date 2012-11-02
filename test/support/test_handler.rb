@@ -48,4 +48,8 @@ class TestHandler < M2R::Handler
   def after_all(request, response)
     @called_methods << :all
   end
+
+  def on_error(request, response, error)
+    @called_methods << :error
+  end
 end
