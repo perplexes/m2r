@@ -38,6 +38,7 @@ module M2R
     #
     # @param [Response, #to_s] response_or_string Response
     #   for the request. Anything convertable to [String]
+    # @return [String] M2 response message
     # @api public
     def reply(request, response_or_string)
       deliver(request.sender, request.conn_id, response_or_string.to_s)
@@ -49,12 +50,14 @@ module M2R
     # @param [String] uuid Mongrel2 instance uuid
     # @param [Array<String>, String] connection_ids Mongrel2 connections ids
     # @param [String] data Data that should be delivered to the connections
+    # @return [String] M2 response message
     #
     # @api public
     def deliver(uuid, connection_ids, data)
       msg = "#{uuid} #{TNetstring.dump([*connection_ids].join(' '))} #{data}"
       ret = @response_socket.send_string(msg)
       raise Error, "Unable to receive message: #{ZMQ::Util.error_string}" if ret < 0
+      return msg
     end
 
     private
