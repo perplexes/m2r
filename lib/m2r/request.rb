@@ -29,14 +29,16 @@ module M2R
     # @param [String] conn_id Mongrel2 connection id sending this request
     # @param [String] path HTTP Path of request
     # @param [M2R::Headers] headers HTTP headers of request
+    # @param [M2R::Headers] headers Additional mongrel2 headers
     # @param [String] body HTTP Body of request
-    def initialize(sender, conn_id, path, headers, body)
-      @http_headers, @mongrel_headers = split_headers(headers)
-      @sender  = sender
-      @conn_id = conn_id
-      @path    = path
-      @body    = body
-      @data    = MultiJson.load(@body) if json?
+    def initialize(sender, conn_id, path, http_headers, mongrel_headers, body)
+      @sender           = sender
+      @conn_id          = conn_id
+      @path             = path
+      @http_headers     = http_headers
+      @mongrel_headers  = mongrel_headers
+      @body             = body
+      @data             = MultiJson.load(@body) if json?
     end
 
     # Parse Mongrel2 request received via ZMQ message
@@ -51,8 +53,11 @@ module M2R
 
       headers, rest = TNetstring.parse(rest)
       body, _       = TNetstring.parse(rest)
-      headers       = Headers.new MultiJson.load(headers)
-      self.new(sender, conn_id, path, headers, body)
+      headers       = MultiJson.load(headers)
+      headers, mong = split_headers(headers)
+      headers       = Headers.new headers, true
+      mong          = Headers.new mong, true
+      self.new(sender, conn_id, path, headers, mong, body)
     end
 
     # @return [M2R::Headers] HTTP headers
@@ -78,6 +83,10 @@ module M2R
     # return [String] URL scheme
     def scheme
       @mongrel_headers['url_scheme'] || mongrel17_scheme
+    end
+
+    def http_version
+      @mongrel_headers['version']
     end
 
     # @return [true, false] Internal mongrel2 message to handler issued when
@@ -106,7 +115,7 @@ module M2R
     end
 
     def unsupported_version?
-      @http_headers['version'] != 'HTTP/1.1'
+      http_version != 'HTTP/1.1'
     end
 
     def connection_close?
@@ -117,13 +126,17 @@ module M2R
       method == 'JSON'
     end
 
-    def split_headers(headers)
-      mongrel = Headers.new
-      mongrel_headers.each do |header|
-        next unless headers[header]
-        mongrel[header] = headers.delete(header)
+    def self.split_headers(headers)
+      http    = {}
+      mongrel = {}
+      headers.each do |header, value|
+        if header =~ /[A-Z]/
+          mongrel[header.downcase] = value
+        else
+          http[header] = value
+        end
       end
-      return headers, mongrel
+      return http, mongrel
     end
   end
 end

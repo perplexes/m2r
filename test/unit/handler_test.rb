@@ -59,19 +59,19 @@ module M2R
 
 
     def disconnect_request
-      Request.new("sender", "conn_id", "/path", Headers.new({"METHOD" => "JSON"}), '{"type":"disconnect"}')
+      Request.new("sender", "conn_id", "/path", Headers.new({}), Headers.new({"METHOD" => "JSON"}), '{"type":"disconnect"}')
     end
 
     def upload_start_request
-      Request.new("sender", "conn_id", "/path", Headers.new({"x-mongrel2-upload-start" => "/tmp/file"}), '')
+      Request.new("sender", "conn_id", "/path", Headers.new({}), Headers.new({"x-mongrel2-upload-start" => "/tmp/file"}), '')
     end
 
     def upload_done_request
-      Request.new("sender", "conn_id", "/path", Headers.new({"x-mongrel2-upload-start" => "/tmp/file", "x-mongrel2-upload-done" => "/tmp/file"}), '')
+      Request.new("sender", "conn_id", "/path", Headers.new({}), Headers.new({"x-mongrel2-upload-start" => "/tmp/file", "x-mongrel2-upload-done" => "/tmp/file"}), '')
     end
 
     def request
-      Request.new("sender", "conn_id", "/path", Headers.new({}), '')
+      Request.new("sender", "conn_id", "/path", Headers.new({}), Headers.new({}), '')
     end
 
   end
