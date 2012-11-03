@@ -78,19 +78,23 @@ module M2R
     # @return [String] HTTP Status code description
     attr_reader :reason
 
+    # @return [String] HTTP Protocol version
+    attr_reader :version
+
     # @param [Fixnum, #to_i] status HTTP status code
     # @param [Hash] headers HTTP headers
     # @param [String, nil] body HTTP body
-    def initialize(status, headers, body = nil)
+    def initialize(status, headers, body = nil, version = VERSION)
       @status  = status.to_i
       @headers = headers
       @body    = body || ""
+      @version = version
       @reason  = STATUS_CODES[status.to_i]
     end
 
     # @return [String] HTTP Response
     def to_s
-      response = "#{VERSION} #{status} #{reason}#{CRLF}"
+      response = "#{version} #{status} #{reason}#{CRLF}"
       unless headers.empty?
         response << headers.map { |h, v| "#{h}: #{v}" }.join(CRLF) << CRLF
       end
