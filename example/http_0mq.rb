@@ -37,7 +37,7 @@ SCHEME:  #{request.scheme}
 BODY:    #{request.body.inspect}
 </pre>
 EOF
-    response = M2R::Response.new(200, {}, body)
+    response = M2R::Response.new(200, {}, body, request.http_version)
     response.extend(M2R::Response::ContentLength)
     return response
   end
