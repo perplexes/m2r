@@ -46,5 +46,18 @@ module M2R
       }, env)
     end
 
+    def test_compatibility_trust
+      headers = Headers.new({"Content-Type" => "CT"}, true)
+      assert_equal nil, headers['content-type']
+    end
+
+    def test_compatibility_direct_access
+      headers = Headers.new(source = {"content-type" => "CT"}, true)
+      assert_equal "CT", headers['content-type']
+      headers['content-type'] = "NEW"
+      assert_equal "NEW", headers['content-type']
+      assert_equal "NEW", source
+    end
+
   end
 end

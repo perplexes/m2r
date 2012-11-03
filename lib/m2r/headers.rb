@@ -7,7 +7,11 @@ module M2R
     include Enumerable
 
     # @param [Hash, #inject] hash Collection of headers
-    def initialize(hash = {})
+    # @param [true, false] compatible Whether the hash already contains
+    #   downcased strings only. If so it is going to be directly as
+    #   container for the headers.
+    def initialize(hash = {}, compatible = false)
+      @headers = hash and return if compatible
       @headers = hash.inject({}) do |headers,(header,value)|
         headers[transform_key(header)] = value
         headers
