@@ -37,7 +37,7 @@ SCHEME:  #{request.scheme}
 BODY:    #{request.body.inspect}
 </pre>
 EOF
-    response = M2R::Response.new(200, {}, body, request.http_version)
+    response = M2R::Response.new.body(body).version(request.http_version)
     # TODO: Response.new().code(200).headers({}).body(body).to(request)
     # !!!!!!!! :)
     # Response.new do |r|
