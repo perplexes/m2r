@@ -1,3 +1,4 @@
+require 'set'
 require 'm2r'
 require 'm2r/request/base'
 require 'm2r/request/upload'
@@ -8,7 +9,13 @@ module M2R
   # @api public
   class Request
     # @api private
-    TRUE_STRINGS     = %w(true yes on 1).map(&:freeze).freeze
+    TRUE_STRINGS            = Set.new(%w(true yes on 1).map(&:freeze)).freeze
+    # @api private
+    MONGREL2_BASE_HEADERS   = Set.new(%w(pattern method path query url_scheme version).map(&:upcase).map(&:freeze)).freeze
+    # @api private
+    MONGREL2_UPLOAD_HEADERS = Set.new(%w(x-mongrel2-upload-start x-mongrel2-upload-done).map(&:downcase).map(&:freeze)).freeze
+    # @api private
+    MONGREL2_HEADERS        = (MONGREL2_BASE_HEADERS + MONGREL2_UPLOAD_HEADERS).freeze
 
     include Base
     include Upload
@@ -100,7 +107,7 @@ module M2R
     #   be closed after processing the request. Happens when HTTP/1.0
     #   or request has Connection=close header.
     def close?
-      unsupported_version? or connection_close?
+      unsupported_version? || connection_close?
     end
 
     protected
@@ -130,7 +137,7 @@ module M2R
       http    = {}
       mongrel = {}
       headers.each do |header, value|
-        if header =~ /[A-Z]/
+        if MONGREL2_HEADERS.include?(header)
           mongrel[header.downcase] = value
         else
           http[header] = value

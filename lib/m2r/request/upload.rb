@@ -3,10 +3,6 @@ module M2R
   # Contains methods for recognizing such requests and reading them.
   # @private
   module Upload
-    # Headers related to async-upload feature
-    # @private
-    MONGREL2_UPLOAD_HEADERS = %w(x-mongrel2-upload-start x-mongrel2-upload-done).map(&:freeze).freeze
-
     # @return [true,false] True if this is async-upload related request
     # @api public
     def upload?
@@ -48,12 +44,6 @@ module M2R
     def free!
       super
       File.delete(body_io.path) if upload_done?
-    end
-
-    protected
-
-    def mongrel_headers
-      super + MONGREL2_UPLOAD_HEADERS
     end
   end
 end
