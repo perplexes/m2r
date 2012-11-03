@@ -54,9 +54,9 @@ module M2R
     def test_compatibility_direct_access
       headers = Headers.new(source = {"content-type" => "CT"}, true)
       assert_equal "CT", headers['content-type']
-      headers['content-type'] = "NEW"
-      assert_equal "NEW", headers['content-type']
-      assert_equal "NEW", source
+      headers['Content-type'] = "NEW"
+      assert_equal "NEW", headers['content-Type']
+      assert_equal "NEW", source['content-type']
     end
 
   end
