@@ -92,6 +92,12 @@ module M2R
       @reason  = STATUS_CODES[status.to_i]
     end
 
+    def close?
+      # TODO: Case sensitive
+      # TODO: Identical logic as in Request ...
+      @headers['Connection'] == 'close'
+    end
+
     # @return [String] HTTP Response
     def to_s
       response = "#{version} #{status} #{reason}#{CRLF}"

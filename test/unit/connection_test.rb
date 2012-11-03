@@ -13,6 +13,7 @@ module M2R
 
       @sub = M2R.zmq_context.socket(ZMQ::SUB)
       assert_equal 0, @sub.bind(@response_addr), "Could not bind sub socket in tests"
+      @sub.setsockopt(ZMQ::SUBSCRIBE, "")
 
 
       @request_socket = M2R.zmq_context.socket(ZMQ::PULL)
@@ -34,6 +35,30 @@ module M2R
       connection = Connection.new(@request_socket, @response_socket)
       @push.send_string(msg = "1c5fd481-1121-49d8-a706-69127975db1a ebb407b2-49aa-48a5-9f96-9db121051484 / 2:{},0:,", ZMQ::NOBLOCK)
       assert_equal msg, connection.receive
+    end
+
+    def test_deliver_message
+      connection = Connection.new(@request_socket, @response_socket)
+      connection.deliver('uuid', ['conn1', 'conn2'], 'ddaattaa')
+      assert_equal 0, @sub.recv_string(msg = "")
+      assert_equal "uuid 11:conn1 conn2, ddaattaa", msg
+    end
+
+    def test_replay_non_close
+      connection = Connection.new(@request_socket, @response_socket)
+      connection.reply( OpenStruct.new(sender: 'uuid', conn_id: 'conn1', close?: false), 'ddaattaa')
+      assert_equal 0, @sub.recv_string(msg = "")
+      assert_equal "uuid 5:conn1, ddaattaa", msg
+      assert_equal -1, @sub.recv_string(msg = "", ZMQ::NOBLOCK)
+    end
+
+    def test_replay_close
+      connection = Connection.new(@request_socket, @response_socket)
+      connection.reply( OpenStruct.new(sender: 'uuid', conn_id: 'conn1', close?: true), 'ddaattaa')
+      assert_equal 0, @sub.recv_string(msg = "")
+      assert_equal "uuid 5:conn1, ddaattaa", msg
+      assert_equal 0, @sub.recv_string(msg = "")
+      assert_equal "uuid 5:conn1, ", msg
     end
 
     def test_exception_when_receiving

@@ -38,6 +38,16 @@ BODY:    #{request.body.inspect}
 </pre>
 EOF
     response = M2R::Response.new(200, {}, body, request.http_version)
+    # TODO: Response.new().code(200).headers({}).body(body).to(request)
+    # !!!!!!!! :)
+    # Response.new do |r|
+    #   r.extend(M2R::Response::ToRequest)
+    #   r.extend(M2R::Response::Close)
+    #   t.to(request)
+    #   r.body()
+    #   r.code()
+    #   r.extend(M2R::Response::ContentLength)
+    # end
     response.extend(M2R::Response::ContentLength)
     return response
   end

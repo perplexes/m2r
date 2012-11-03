@@ -42,6 +42,7 @@ module M2R
     # @api public
     def reply(request, response_or_string)
       deliver(request.sender, request.conn_id, response_or_string.to_s)
+      deliver(request.sender, request.conn_id, "") if close?(request, response_or_string)
     end
 
     # Delivers data to multiple mongrel2 connections.
@@ -55,12 +56,18 @@ module M2R
     # @api public
     def deliver(uuid, connection_ids, data)
       msg = "#{uuid} #{TNetstring.dump([*connection_ids].join(' '))} #{data}"
+      # TODO: ret = @response_socket.send_string(msg, ZMQ::NOBLOCK)
       ret = @response_socket.send_string(msg)
       raise Error, "Unable to deliver message: #{ZMQ::Util.error_string}" if ret < 0
       return msg
     end
 
     private
+
+    def close?(request, response_or_string)
+      # TODO: only check response if close. Response should know it based on request
+      request.close? || ( response_or_string.respond_to?(:close?) && response_or_string.close? )
+    end
 
     attr_reader :request_socket
     attr_reader :response_socket
