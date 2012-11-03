@@ -67,6 +67,10 @@ module M2R
       env
     end
 
+    def empty?
+      @headers.empty?
+    end
+
     protected
 
     def transform_key(key)

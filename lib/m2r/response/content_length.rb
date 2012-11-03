@@ -10,8 +10,14 @@ module M2R
     #
     # @api public
     module ContentLength
-      def headers
-        super.merge('Content-Length' => body.bytesize)
+      def headers(value = GETTER)
+        if value == GETTER
+          h = super
+          h['Content-Length'] ||= body.bytesize
+          h
+        else
+          super
+        end
       end
     end
   end

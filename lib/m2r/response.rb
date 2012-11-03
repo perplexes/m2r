@@ -66,30 +66,54 @@ module M2R
     }
     STATUS_CODES.freeze
 
-    # @return [Fixnum] HTTP Status code
-    attr_reader :status
-
-    # @return [Hash, Headers] Collection of response HTTP Headers
-    attr_reader :headers
-
-    # @return [String] HTTP Body
-    attr_reader :body
-
-    # @return [String] HTTP Status code description
     attr_reader :reason
 
-    # @return [String] HTTP Protocol version
-    attr_reader :version
+    def initialize
+      status(200)
+      headers(Headers.new)
+      body("")
+      version(VERSION)
+    end
 
-    # @param [Fixnum, #to_i] status HTTP status code
-    # @param [Hash] headers HTTP headers
-    # @param [String, nil] body HTTP body
-    def initialize(status, headers, body = nil, version = VERSION)
-      @status  = status.to_i
-      @headers = headers
-      @body    = body || ""
-      @version = version
-      @reason  = STATUS_CODES[status.to_i]
+    # @param [Fixnum, #to_i] value HTTP status code
+    def status(value = GETTER)
+      if value == GETTER
+        @status
+      else
+        @status = value.to_i
+        @reason = STATUS_CODES[@status]
+        self
+      end
+    end
+
+    # @param [Hash] value HTTP headers
+    def headers(value = GETTER)
+      if value == GETTER
+        @headers
+      else
+        @headers = value
+        self
+      end
+    end
+
+    # @param [String, nil] value HTTP body
+    def body(value = GETTER)
+      if value == GETTER
+        @body
+      else
+        @body = value
+        self
+      end
+    end
+
+    # @param [String, nil] version HTTP body
+    def version(value = GETTER)
+      if value == GETTER
+        @version
+      else
+        @version = value
+        self
+      end
     end
 
     def close?
@@ -105,8 +129,12 @@ module M2R
         response << headers.map { |h, v| "#{h}: #{v}" }.join(CRLF) << CRLF
       end
       response << CRLF
-      response << body
+      response << body.to_s
       response
     end
+
+    protected
+
+    GETTER = Object.new
   end
 end
