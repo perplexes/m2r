@@ -28,7 +28,7 @@ module M2R
     end
 
     def test_response_with_old_version
-      ok = Response.new.version('HTTP/1.0').body('data')
+      ok = Response.new.http_version('HTTP/1.0').body('data')
       ok.extend Response::ContentLength
       http = "HTTP/1.0 200 OK\r\ncontent-length: 4\r\n\r\ndata"
       assert_equal http, ok.to_s

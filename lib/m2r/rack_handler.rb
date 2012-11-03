@@ -36,7 +36,7 @@ module M2R
       status, headers, body = @app.call(env)
       buffer = ""
       body.each { |part| buffer << part }
-      return Response.new.status(status).headers(headers).body(buffer).version(request.http_version)
+      return Response.new.status(status).headers(headers).body(buffer).http_version(request.http_version)
     end
 
     def after_all(request, response)

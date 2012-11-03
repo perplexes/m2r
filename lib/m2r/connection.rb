@@ -64,8 +64,11 @@ module M2R
     private
 
     def close?(request, response_or_string)
-      # TODO: only check response if close. Response should know it based on request
-      request.close? || ( response_or_string.respond_to?(:close?) && response_or_string.close? )
+      if response_or_string.respond_to?(:close?)
+        response_or_string.close?
+      else
+        request.close?
+      end
     end
 
     attr_reader :request_socket

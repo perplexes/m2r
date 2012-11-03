@@ -1,5 +1,6 @@
 require 'set'
 require 'm2r'
+require 'm2r/http/close'
 require 'm2r/request/base'
 require 'm2r/request/upload'
 require 'm2r/headers'
@@ -103,13 +104,6 @@ module M2R
       json? and @data['type'] == 'disconnect'
     end
 
-    # @return [true, false] Information whether HTTP Connection should
-    #   be closed after processing the request. Happens when HTTP/1.0
-    #   or request has Connection=close header.
-    def close?
-      unsupported_version? || connection_close?
-    end
-
     protected
 
     def mongrel17_scheme
@@ -119,14 +113,6 @@ module M2R
 
     def env_https
       (ENV['HTTPS'] || "").downcase
-    end
-
-    def unsupported_version?
-      http_version != 'HTTP/1.1'
-    end
-
-    def connection_close?
-      @http_headers['connection'] == 'close'
     end
 
     def json?

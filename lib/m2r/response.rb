@@ -1,4 +1,5 @@
 require 'm2r'
+require 'm2r/http/close'
 require 'm2r/response/content_length'
 
 module M2R
@@ -6,6 +7,7 @@ module M2R
   #
   # @api public
   class Response
+    include HTTP::Close
 
     # @private
     VERSION      = "HTTP/1.1".freeze
@@ -72,7 +74,7 @@ module M2R
       status(200)
       headers(Headers.new)
       body("")
-      version(VERSION)
+      http_version(VERSION)
     end
 
     # @param [Fixnum, #to_i] value HTTP status code
@@ -107,7 +109,7 @@ module M2R
     end
 
     # @param [String, nil] version HTTP body
-    def version(value = GETTER)
+    def http_version(value = GETTER)
       if value == GETTER
         @version
       else
@@ -116,15 +118,9 @@ module M2R
       end
     end
 
-    def close?
-      # TODO: Case sensitive
-      # TODO: Identical logic as in Request ...
-      @headers['Connection'] == 'close'
-    end
-
     # @return [String] HTTP Response
     def to_s
-      response = "#{version} #{status} #{reason}#{CRLF}"
+      response = "#{http_version} #{status} #{reason}#{CRLF}"
       unless headers.empty?
         response << headers.map { |h, v| "#{h}: #{v}" }.join(CRLF) << CRLF
       end
