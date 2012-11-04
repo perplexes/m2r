@@ -98,6 +98,17 @@ module M2R
       end
     end
 
+    # @param [Hash] header HTTP header key
+    # @param [Hash] value HTTP header value
+    def header(header, value = GETTER)
+      if value == GETTER
+        @headers[header]
+      else
+        @headers[header] = value
+        self
+      end
+    end
+
     # @param [String, nil] value HTTP body
     def body(value = GETTER)
       if value == GETTER
