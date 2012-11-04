@@ -37,13 +37,8 @@ SCHEME:  #{request.scheme}
 BODY:    #{request.body.inspect}
 </pre>
 EOF
-    response = M2R::Response.new.extend(M2R::Response::ContentLength).body(body).http_version(request.http_version)
-    # TODO:
-    #   r.extend(M2R::Response::ToRequest).to(request) # ustawia version i Connection header
-    #   r.extend(M2R::Response::Close) To jednak powinno byc w kazdym zaimplementowane bo sami bedziemy tego uzywac
+    response = M2R::Reply.new.to(request).body(body)
     return response
-    # M2R::Reply jako response z zainkludowanymi najpotrzebniejszymi
-    # M2R::AlwaysClose
   end
 end
 

@@ -1,5 +1,9 @@
 module M2R
   module HTTP
+
+    # Detect that whether connection should be closed
+    # based on http protocol version and `Connection' header
+    # We do not support persistent connections for HTTP 1.0
     module Close
 
       # @return [true, false] Information whether HTTP Connection should
@@ -11,6 +15,7 @@ module M2R
 
       protected
 
+      # http://en.wikipedia.org/wiki/HTTP_persistent_connection
       def unsupported_version?
         http_version != 'HTTP/1.1'
       end
@@ -20,5 +25,6 @@ module M2R
       end
 
     end
+
   end
 end
