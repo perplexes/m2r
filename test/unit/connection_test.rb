@@ -44,17 +44,34 @@ module M2R
       assert_equal "uuid 11:conn1 conn2, ddaattaa", msg
     end
 
-    def test_replay_non_close
+    def test_string_replay_non_close
       connection = Connection.new(@request_socket, @response_socket)
-      connection.reply( OpenStruct.new(sender: 'uuid', conn_id: 'conn1', close?: false), 'ddaattaa')
+      connection.reply( stub(sender: 'uuid', conn_id: 'conn1', close?: false), 'ddaattaa')
       assert_equal 0, @sub.recv_string(msg = "")
       assert_equal "uuid 5:conn1, ddaattaa", msg
       assert_equal -1, @sub.recv_string(msg = "", ZMQ::NOBLOCK)
     end
 
-    def test_replay_close
+    def test_string_replay_close
       connection = Connection.new(@request_socket, @response_socket)
-      connection.reply( OpenStruct.new(sender: 'uuid', conn_id: 'conn1', close?: true), 'ddaattaa')
+      connection.reply( stub(sender: 'uuid', conn_id: 'conn1', close?: true), 'ddaattaa')
+      assert_equal 0, @sub.recv_string(msg = "")
+      assert_equal "uuid 5:conn1, ddaattaa", msg
+      assert_equal 0, @sub.recv_string(msg = "")
+      assert_equal "uuid 5:conn1, ", msg
+    end
+
+    def test_response_replay_non_close
+      connection = Connection.new(@request_socket, @response_socket)
+      connection.reply( stub(sender: 'uuid', conn_id: 'conn1'), mock(to_s: 'ddaattaa', close?: false))
+      assert_equal 0, @sub.recv_string(msg = "")
+      assert_equal "uuid 5:conn1, ddaattaa", msg
+      assert_equal -1, @sub.recv_string(msg = "", ZMQ::NOBLOCK)
+    end
+
+    def test_response_replay_close
+      connection = Connection.new(@request_socket, @response_socket)
+      connection.reply( stub(sender: 'uuid', conn_id: 'conn1'), mock(to_s: 'ddaattaa', close?: true))
       assert_equal 0, @sub.recv_string(msg = "")
       assert_equal "uuid 5:conn1, ddaattaa", msg
       assert_equal 0, @sub.recv_string(msg = "")
