@@ -20,6 +20,7 @@ module M2R
 
     include Base
     include Upload
+    include HTTP::Close
 
     # @return [String] UUID of mongrel2 origin instance
     attr_reader :sender

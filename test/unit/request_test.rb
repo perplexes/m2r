@@ -12,6 +12,7 @@ module M2R
       assert_equal nil, request.query
       assert_equal nil, request.pattern
       assert_equal "https", request.scheme
+      assert_equal false, request.close?
     end
 
     def test_scheme
