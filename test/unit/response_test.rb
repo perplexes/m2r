@@ -50,5 +50,20 @@ module M2R
       assert_equal data , ok.body
       assert_equal 2,     ok.headers.size
     end
+
+    def test_default_close
+      ok = Response.new
+      refute ok.close?
+    end
+
+    def test_http10_close
+      ok = Response.new.http_version('HTTP/1.0')
+      assert ok.close?
+    end
+
+    def test_header_close
+      ok = Response.new.header('Connection', 'close')
+      assert ok.close?
+    end
   end
 end
