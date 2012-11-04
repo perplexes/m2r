@@ -89,5 +89,13 @@ module M2R
       assert_equal 'HTTP/1.1', ok.http_version
       assert_equal nil, ok.header('Connection')
     end
+
+    def test_response_to_http11_with_close
+      ok = Response.new
+      ok.extend(Response::ToRequest)
+      ok.to(stub(http_version: 'HTTP/1.1', close?:true))
+      assert_equal 'HTTP/1.1', ok.http_version
+      assert_equal 'close', ok.header('Connection')
+    end
   end
 end
