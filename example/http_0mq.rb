@@ -22,6 +22,12 @@ class Http0MQHandler < M2R::Handler
     puts "DISCONNECT"
   end
 
+  def on_error(request, response, error)
+    puts "ERROR:"
+    puts error.message
+    puts *error.backtrace
+  end
+
   def process(request)
     body = <<EOF
 <pre>
