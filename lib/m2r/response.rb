@@ -1,6 +1,7 @@
 require 'm2r'
 require 'm2r/http/close'
 require 'm2r/response/content_length'
+require 'm2r/response/to_request'
 
 module M2R
   # Simplest possible abstraction layer over HTTP request

@@ -65,5 +65,21 @@ module M2R
       ok = Response.new.header('Connection', 'close')
       assert ok.close?
     end
+
+    def test_response_to_http10
+      ok = Response.new
+      ok.extend(Response::ToRequest)
+      ok.to(mock(http_version: 'HTTP/1.0', close?:true))
+      assert_equal 'HTTP/1.0', ok.http_version
+      assert_equal 'close', ok.header('Connection')
+    end
+
+    def test_response_to_http11
+      ok = Response.new
+      ok.extend(Response::ToRequest)
+      ok.to(mock(http_version: 'HTTP/1.1', close?:false))
+      assert_equal 'HTTP/1.1', ok.http_version
+      assert_equal nil, ok.header('Connection')
+    end
   end
 end
