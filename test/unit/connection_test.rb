@@ -44,7 +44,7 @@ module M2R
       assert_equal "uuid 11:conn1 conn2, ddaattaa", msg
     end
 
-    def test_string_replay_non_close
+    def test_string_reply_non_close
       connection = Connection.new(@request_socket, @response_socket)
       connection.reply( stub(sender: 'uuid', conn_id: 'conn1', close?: false), 'ddaattaa')
       assert_equal 0, @sub.recv_string(msg = "")
@@ -52,7 +52,7 @@ module M2R
       assert_equal -1, @sub.recv_string(msg = "", ZMQ::NOBLOCK)
     end
 
-    def test_string_replay_close
+    def test_string_reply_close
       connection = Connection.new(@request_socket, @response_socket)
       connection.reply( stub(sender: 'uuid', conn_id: 'conn1', close?: true), 'ddaattaa')
       assert_equal 0, @sub.recv_string(msg = "")
@@ -61,7 +61,7 @@ module M2R
       assert_equal "uuid 5:conn1, ", msg
     end
 
-    def test_response_replay_non_close
+    def test_response_reply_non_close
       connection = Connection.new(@request_socket, @response_socket)
       connection.reply( stub(sender: 'uuid', conn_id: 'conn1'), mock(to_s: 'ddaattaa', close?: false))
       assert_equal 0, @sub.recv_string(msg = "")
@@ -69,7 +69,7 @@ module M2R
       assert_equal -1, @sub.recv_string(msg = "", ZMQ::NOBLOCK)
     end
 
-    def test_response_replay_close
+    def test_response_reply_close
       connection = Connection.new(@request_socket, @response_socket)
       connection.reply( stub(sender: 'uuid', conn_id: 'conn1'), mock(to_s: 'ddaattaa', close?: true))
       assert_equal 0, @sub.recv_string(msg = "")
