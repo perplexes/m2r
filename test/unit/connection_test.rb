@@ -84,6 +84,42 @@ module M2R
       assert_raises(Connection::Error) { connection.receive }
     end
 
+    def test_exception_erron_when_receiving
+      request_socket = mock(:recv_string => -1)
+      ZMQ::Util.expects(:errno).at_least_once.returns(4)
+      connection = Connection.new request_socket, nil
+      begin
+        connection.receive
+        flunk "exception expected"
+      rescue => er
+        assert_equal 4, er.errno
+        assert er.signal?
+      end
+    end
+
+    def test_exception_when_deliverying
+      ZMQ::Util.expects(:errno).at_least_once.returns(1)
+      response_socket = mock(:send_string => -1)
+      connection = Connection.new nil, response_socket
+      assert_raises(Connection::Error) { connection.deliver('uuid', ['connection_ids'], 'data') }
+    end
+
+    def test_exception_signal_retry
+      ZMQ::Util.expects(:errno).at_least_once.returns(4)
+      response_socket = mock
+      response_socket.expects(:send_string).times(3).returns(-1)
+      connection = Connection.new nil, response_socket
+      assert_raises(Connection::Error) { connection.deliver('uuid', ['connection_ids'], 'data') }
+    end
+
+    def test_exception_signal_retry_ok
+      ZMQ::Util.expects(:errno).at_least_once.returns(4)
+      response_socket = mock
+      response_socket.expects(:send_string).twice.returns(-1).then.returns(0)
+      connection = Connection.new nil, response_socket
+      assert connection.deliver('uuid', ['connection_ids'], 'data').size > 0
+    end
+
     def test_exception_when_deliverying
       response_socket = mock(:send_string => -1)
       connection = Connection.new nil, response_socket

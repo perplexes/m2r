@@ -3,7 +3,12 @@ require 'm2r'
 module M2R
   # Connection for exchanging data with mongrel2
   class Connection
-    class Error < StandardError; end
+    class Error < StandardError
+      attr_accessor :errno
+      def signal?
+        errno == ZMQ::EINTR
+      end
+    end
 
     # @param [ZMQ::Socket] request_socket socket for receiving requests
     #   from Mongrel2
@@ -30,7 +35,11 @@ module M2R
     # @api public
     def receive
       ret = @request_socket.recv_string(msg = "")
-      raise Error, "Unable to receive message: #{ZMQ::Util.error_string}" if ret < 0
+      if ret < 0
+        e = Error.new "Unable to receive message: #{ZMQ::Util.error_string}"
+        e.errno = ZMQ::Util.errno
+        raise e
+      end
       return msg
     end
 
@@ -54,11 +63,24 @@ module M2R
     # @return [String] M2 response message
     #
     # @api public
-    def deliver(uuid, connection_ids, data)
+    def deliver(uuid, connection_ids, data, trial = 1)
       msg = "#{uuid} #{TNetstring.dump([*connection_ids].join(' '))} #{data}"
       ret = @response_socket.send_string(msg, ZMQ::NOBLOCK)
-      raise Error, "Unable to deliver message: #{ZMQ::Util.error_string}" if ret < 0
+      if ret < 0
+        e = Error.new "Unable to deliver message: #{ZMQ::Util.error_string}"
+        e.errno = ZMQ::Util.errno
+        raise e
+      end
       return msg
+    rescue Connection::Error => er
+      raise if trial >= 3
+      raise unless er.signal?
+      deliver(uuid, connection_ids, data, trial + 1)
+    end
+
+    def close
+      @request_socket.close
+      @response_socket.close
     end
 
     private
