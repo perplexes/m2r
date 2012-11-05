@@ -1,10 +1,20 @@
 require 'test_helper'
 require 'm2r/rack_handler'
 require 'm2r/connection_factory'
+require 'tempfile'
 
 class HelloWorld
   def call(env)
     return [200, {'Content-Type' => 'text/plain'}, ["Hello world!"]]
+  end
+end
+
+class HelloWorldFile
+  def call(env)
+    Thread.current[:tempfile] = t = Tempfile.new("asd")
+    t << "Hello world!\n"
+    t.rewind
+    return [201, {'Content-Type' => 'text/plain'}, t]
   end
 end
 
@@ -48,6 +58,16 @@ module M2R
       assert_equal 200, response.status
     end
 
+    def test_file_closed
+      factory    = stub(:connection)
+      handler    = RackHandler.new(file_app, factory, Request)
+      response   = handler.process(root_request)
+
+      assert_equal "Hello world!\n", response.body
+      assert_equal 201, response.status
+      assert Thread.current[:tempfile].closed?
+    end
+
     def test_custom_connection_factory
       require 'rack/handler/mongrel2'
       handler = ::Rack::Handler::Mongrel2
@@ -71,6 +91,10 @@ module M2R
 
     def app
       Rack::Lint.new(HelloWorld.new)
+    end
+
+    def file_app
+      Rack::Lint.new(HelloWorldFile.new)
     end
   end
 end

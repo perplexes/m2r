@@ -36,6 +36,7 @@ module M2R
       status, headers, body = @app.call(env)
       buffer = ""
       body.each { |part| buffer << part }
+      body.close if body.respond_to?(:close)
       return Response.new.status(status).headers(headers).body(buffer)
     end
 
