@@ -1,0 +1,16 @@
+{
+    "name": "m2r.local",
+    "env": "development",
+    "ipaddress": "172.26.66.100",
+    "run_list": [
+      "recipe[essential]",
+      "recipe[build-essential]",
+      "recipe[ruby-build]",
+      "recipe[zmq]",
+      "recipe[mongrel2]",
+      "recipe[m2r]"
+    ],
+    "ruby": "1.9.3-p286",
+    "username":"vagrant",
+    "home_root":"/home"
+}
