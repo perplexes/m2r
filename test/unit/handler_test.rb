@@ -54,6 +54,26 @@ module M2R
       assert_equal [:wait, :request, :process, :all, :error], h.called_methods
     end
 
+    def test_signal_when_receive
+      e = Connection::Error.new.tap{|x| x.errno = 4}
+      connection = stub(:reply => nil)
+      connection.stubs(:connection).returns(connection)
+      connection.expects(:receive).raises(e).then.returns("").twice
+      parser = stub(:parse => request)
+      h = TestHandler.new(connection, parser)
+      h.extend(Module.new(){
+        def on_wait
+          if @called_methods.size > 2
+            stop
+            return
+          end
+          @called_methods << :wait
+        end
+      })
+      h.listen
+      assert_equal [:wait, :interrupted, :wait, :request, :process, :after, :reply, :all], h.called_methods
+    end
+
 
     private
 

@@ -52,4 +52,8 @@ class TestHandler < M2R::Handler
   def on_error(request, response, error)
     @called_methods << :error
   end
+
+  def on_interrupted
+    @called_methods << :interrupted
+  end
 end

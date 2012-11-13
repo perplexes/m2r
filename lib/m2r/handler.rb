@@ -127,6 +127,12 @@ module M2R
     def on_error(request, response, error)
     end
 
+    # Callback when ZMQ interrupted by signal
+    # @api public
+    # @!visibility public
+    def on_interrupted
+    end
+
     private
 
     def next_request
@@ -138,6 +144,7 @@ module M2R
       throw :stop if stop?
       response = request_lifecycle(request = next_request)
     rescue => error
+      return on_interrupted if Connection::Error === error && error.signal?
       on_error(request, response, error)
     end
 
