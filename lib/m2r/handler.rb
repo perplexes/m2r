@@ -30,6 +30,7 @@ module M2R
       catch(:stop) do
         loop { one_loop }
       end
+      @connection.close
     end
 
     # Schedule stop after processing request

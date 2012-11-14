@@ -78,6 +78,9 @@ module M2R
       deliver(uuid, connection_ids, data, trial + 1)
     end
 
+    # Closes ZMQ sockets
+    #
+    # @api public
     def close
       @request_socket.close
       @response_socket.close

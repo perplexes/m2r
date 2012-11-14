@@ -43,9 +43,11 @@ module M2R
         'send_addr' => send = 'tcp://1.2.3.4:4321',
         'sender_id' => id   = SecureRandom.uuid
       }
-      cf = mock(:connection)
+      cf = stub()
+      cf.stubs(:connection => cf, :close => nil)
       ConnectionFactory.expects(:new).with(responds_with(:sender_id, id)).returns(cf)
       RackHandler.any_instance.stubs(:stop? => true)
+      M2R.zmq_context.expects(:terminate)
       handler.run(HelloWorld.new, options)
     end
 
@@ -74,9 +76,11 @@ module M2R
       options = {
         'connection_factory' => 'custom'
       }
-      cf = mock(:connection)
+      cf = stub()
+      cf.stubs(:connection => cf, :close => nil)
       ConnectionFactory::Custom.expects(:new).with(responds_with(:connection_factory, 'custom')).returns(cf)
       RackHandler.any_instance.stubs(:stop? => true)
+      M2R.zmq_context.expects(:terminate)
       handler.run(HelloWorld.new, options)
     end
 

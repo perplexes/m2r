@@ -10,8 +10,6 @@ module M2R
     def initialize(app, connection_factory, parser)
       @app = app
       super(connection_factory, parser)
-
-      trap('INT') { stop }
     end
 
     def process(request)

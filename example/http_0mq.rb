@@ -54,5 +54,9 @@ pub_port  = "tcp://127.0.0.1:9998"
 
 factory   = M2R::ConnectionFactory.new M2R::ConnectionFactory::Options.new(sender_id, pull_port, pub_port)
 handler   = Http0MQHandler.new(factory, M2R::Request)
+graceful  = Proc.new { handler.stop }
+trap("INT",  &graceful)
+trap("TERM", &graceful)
 handler.listen
+M2R.zmq_context.terminate
 

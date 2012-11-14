@@ -13,10 +13,14 @@ module Rack
       }
 
       def self.run(app, options = {})
-        options = OpenStruct.new( DEFAULT_OPTIONS.merge(options) )
-        parser  = M2R::Request
-        adapter = M2R::RackHandler.new(app, connection_factory(options), parser)
+        options  = OpenStruct.new( DEFAULT_OPTIONS.merge(options) )
+        parser   = M2R::Request
+        adapter  = M2R::RackHandler.new(app, connection_factory(options), parser)
+        graceful = Proc.new { adapter.stop }
+        trap("INT",  &graceful)
+        trap("TERM", &graceful)
         adapter.listen
+        M2R.zmq_context.terminate
       end
 
       def self.valid_options
