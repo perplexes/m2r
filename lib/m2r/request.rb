@@ -57,16 +57,9 @@ module M2R
     # @return [Request]
     #
     # @api public
+    # @deprecated
     def self.parse(msg)
-      sender, conn_id, path, rest = msg.split(' ', 4)
-
-      headers, rest = TNetstring.parse(rest)
-      body, _       = TNetstring.parse(rest)
-      headers       = MultiJson.load(headers)
-      headers, mong = split_headers(headers)
-      headers       = Headers.new headers, true
-      mong          = Headers.new mong, true
-      self.new(sender, conn_id, path, headers, mong, body)
+      Parser.new.parse(msg)
     end
 
     # @return [M2R::Headers] HTTP headers

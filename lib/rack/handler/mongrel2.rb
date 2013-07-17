@@ -14,8 +14,8 @@ module Rack
 
       def self.run(app, options = {})
         options  = OpenStruct.new( DEFAULT_OPTIONS.merge(options) )
-        parser   = M2R::Request
-        adapter  = M2R::RackHandler.new(app, connection_factory(options), parser)
+        threadsafe_parser = M2R::Parser.new
+        adapter  = M2R::RackHandler.new(app, connection_factory(options), threadsafe_parser)
         graceful = Proc.new { adapter.stop }
         trap("INT",  &graceful)
         trap("TERM", &graceful)

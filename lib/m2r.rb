@@ -43,6 +43,7 @@ end
 Mongrel2 = M2R
 
 require 'm2r/request'
+require 'm2r/parser'
 require 'm2r/response'
 require 'm2r/reply'
 require 'm2r/connection'
