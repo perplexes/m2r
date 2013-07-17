@@ -113,17 +113,5 @@ module M2R
       method == 'JSON'
     end
 
-    def self.split_headers(headers)
-      http    = {}
-      mongrel = {}
-      headers.each do |header, value|
-        if MONGREL2_HEADERS.include?(header)
-          mongrel[header.downcase] = value
-        else
-          http[header] = value
-        end
-      end
-      return http, mongrel
-    end
   end
 end
