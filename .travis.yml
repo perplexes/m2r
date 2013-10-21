@@ -20,6 +20,7 @@ notifications:
   irc: "irc.freenode.org#mongrel2-ruby"
 
 before_install:
+  - sudo apt-get install -qq libzmq3-dev
   - mkdir mongrel2-1.7.5
   - curl -L https://github.com/zedshaw/mongrel2/archive/v1.7.5.tar.gz -o - |tar --strip-components=1 -C mongrel2-1.7.5 -zxvf -
   - cd mongrel2-1.7.5
