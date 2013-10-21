@@ -51,7 +51,7 @@ module M2R
 
       start = Time.now
       8.times do |i|
-        @push.send_string(msg = "1c5fd481-1121-49d8-a706-69127975db1a ebb407b2-49aa-48a5-9f96-9db12105148#{i} / 2:{},1:#{i},", ZMQ::NOBLOCK)
+        @push.send_string(msg = "1c5fd481-1121-49d8-a706-69127975db1a ebb407b2-49aa-48a5-9f96-9db12105148#{i} / 2:{},1:#{i},", ZMQ::NonBlocking)
       end
       responses = 16.times.map do
         @sub.recv_string(msg = "")

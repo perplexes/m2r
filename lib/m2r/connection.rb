@@ -65,7 +65,7 @@ module M2R
     # @api public
     def deliver(uuid, connection_ids, data, trial = 1)
       msg = "#{uuid} #{TNetstring.dump([*connection_ids].join(' '))} #{data}"
-      ret = @response_socket.send_string(msg, ZMQ::NOBLOCK)
+      ret = @response_socket.send_string(msg, ZMQ::NonBlocking)
       if ret < 0
         e = Error.new "Unable to deliver message: #{ZMQ::Util.error_string}"
         e.errno = ZMQ::Util.errno
