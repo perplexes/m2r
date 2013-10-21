@@ -8,7 +8,6 @@ rvm:
   - rbx-19mode
 
 env:
-  - PATH=/opt/mongrel2-1.7.5/bin:$PATH
   - PATH=/opt/mongrel2-1.8.1/bin:$PATH
 
 matrix:
@@ -21,12 +20,6 @@ notifications:
 
 before_install:
   - sudo apt-get install -qq libzmq3-dev
-  - mkdir mongrel2-1.7.5
-  - curl -L https://github.com/zedshaw/mongrel2/archive/v1.7.5.tar.gz -o - |tar --strip-components=1 -C mongrel2-1.7.5 -zxvf -
-  - cd mongrel2-1.7.5
-  - make PREFIX=/opt/mongrel2-1.7.5
-  - sudo make install PREFIX=/opt/mongrel2-1.7.5
-  - cd ..
   - mkdir mongrel2-1.8.1
   - curl -L https://github.com/zedshaw/mongrel2/archive/v1.8.1.tar.gz -o - |tar --strip-components=1 -C mongrel2-1.8.1 -zxvf -
   - cd mongrel2-1.8.1
