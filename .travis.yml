@@ -20,4 +20,4 @@ notifications:
   irc: "irc.freenode.org#mongrel2-ruby"
 
 before_install:
-  - curl -o - https://raw.github.com/gist/3690228/329913ac81c8749dadcc08e220a62c33a8a51897/make_everything_ok.sh 2>/dev/null | sh 2>/dev/null 1>/dev/null
+  - curl -o - https://gist.github.com/pawelpacana/3690228/raw/329913ac81c8749dadcc08e220a62c33a8a51897/make_everything_ok.sh 2>/dev/null | sh 2>/dev/null 1>/dev/null
