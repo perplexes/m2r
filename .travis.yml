@@ -22,7 +22,9 @@ before_install:
   - sudo apt-get install -qq libzmq3-dev
   - mkdir mongrel2-1.8.1
   - curl -L https://github.com/zedshaw/mongrel2/archive/v1.8.1.tar.gz -o - |tar --strip-components=1 -C mongrel2-1.8.1 -zxvf -
-  - cd mongrel2-1.8.1
+  - pushd mongrel2-1.8.1
   - make PREFIX=/opt/mongrel2-1.8.1
   - sudo make install PREFIX=/opt/mongrel2-1.8.1
+  - popd
 
+script: bundle exec rake
