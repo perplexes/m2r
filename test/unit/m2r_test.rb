@@ -34,6 +34,8 @@ module M2R
       Timeout.timeout(5) do
         threads.each(&:join)
       end
+
+      M2R.zmq_context = nil
     end
 
   end
