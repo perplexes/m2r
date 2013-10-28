@@ -1,5 +1,3 @@
-require 'm2r'
-
 module M2R
 
   # Basic handler, scaffold for your own Handler.

@@ -1,4 +1,3 @@
-require 'm2r'
 require 'ostruct'
 
 module M2R

@@ -1,5 +1,4 @@
 require 'set'
-require 'm2r'
 require 'm2r/http/close'
 require 'm2r/request/base'
 require 'm2r/request/upload'

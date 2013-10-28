@@ -1,5 +1,3 @@
-require 'm2r/response'
-
 module M2R
   class Response
 

@@ -1,5 +1,3 @@
-require 'm2r'
-
 module M2R
   # Connection for exchanging data with mongrel2
   class Connection
