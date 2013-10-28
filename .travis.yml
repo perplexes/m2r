@@ -1,20 +1,13 @@
 language: ruby
 rvm:
   - 1.9.3
-  - 1.9.2
   - 2.0.0
-  - ruby-head
+  - 2.1.0-preview1
   - jruby-19mode
-  - jruby-head
   - rbx-19mode
 
 env:
   - PATH=/opt/mongrel2-1.8.1/bin:$PATH
-
-matrix:
-  allow_failures:
-    - rvm: ruby-head
-    - rvm: jruby-head
 
 notifications:
   irc: "irc.freenode.org#mongrel2-ruby"
