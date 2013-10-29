@@ -42,6 +42,7 @@ end
 #   Namespace used in the past in 0.0.* gem releases
 Mongrel2 = M2R
 
+require 'm2r/version'
 require 'm2r/request'
 require 'm2r/parser'
 require 'm2r/response'
