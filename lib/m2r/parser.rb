@@ -17,7 +17,7 @@ module M2R
 
       headers, rest = TNetstring.parse(rest)
       body, _       = TNetstring.parse(rest)
-      headers       = MultiJson.load(headers)
+      headers       = JSON.load(headers)
       headers, mong = split_headers(headers)
       headers       = Headers.new headers, true
       mong          = Headers.new mong, true

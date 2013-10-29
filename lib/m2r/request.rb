@@ -46,7 +46,7 @@ module M2R
       @http_headers     = http_headers
       @mongrel_headers  = mongrel_headers
       @body             = body
-      @data             = MultiJson.load(@body) if json?
+      @data             = JSON.load(@body) if json?
     end
 
     # Parse Mongrel2 request received via ZMQ message

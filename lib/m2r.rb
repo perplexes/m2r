@@ -1,5 +1,5 @@
 require 'ffi-rzmq'
-require 'multi_json'
+require 'json'
 require 'tnetstring'
 require 'thread'
 

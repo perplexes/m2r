@@ -34,7 +34,7 @@ class Http0MQHandler < M2R::Handler
 SENDER:  #{request.sender}
 IDENT:   #{request.conn_id}
 PATH:    #{request.path}
-HEADERS: #{MultiJson.dump(request.headers.inject({}) {|hash,(h,v)| hash[h]=v; hash }, :pretty => true)}
+HEADERS: #{JSON.dump(request.headers.inject({}) {|hash,(h,v)| hash[h]=v; hash }, :pretty => true)}
 PATTERN: #{request.pattern}
 VERSION: #{request.http_version}
 METHOD:  #{request.method}
